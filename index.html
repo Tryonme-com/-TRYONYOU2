@@ -51,9 +51,64 @@
             </div>
         </section>
 
+        <section id="consultation" class="consultation-section" style="padding: 4rem 0; background-color: #f9f9f9;">
+            <div class="container">
+                <h2>AI Stylist Consultation (Jules)</h2>
+                <div class="consultation-container" style="max-width: 600px; margin: 0 auto;">
+                    <p style="text-align: center; margin-bottom: 2rem;">Get personalized high-end styling advice from Jules, powered by Gemini.</p>
+                    <form id="jules-form" class="jules-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="form-group" style="display: flex; flex-direction: column;">
+                            <label for="height" style="margin-bottom: 0.5rem; font-weight: bold;">Height (cm)</label>
+                            <input type="number" id="height" name="height" placeholder="e.g. 175" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group" style="display: flex; flex-direction: column;">
+                            <label for="weight" style="margin-bottom: 0.5rem; font-weight: bold;">Weight (kg)</label>
+                            <input type="number" id="weight" name="weight" placeholder="e.g. 68" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group" style="display: flex; flex-direction: column;">
+                            <label for="event_type" style="margin-bottom: 0.5rem; font-weight: bold;">Event Type</label>
+                            <select id="event_type" name="event_type" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="Gala">Gala</option>
+                                <option value="Business">Business</option>
+                                <option value="Cocktail">Cocktail</option>
+                                <option value="Casual">Casual</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="cta-button" style="margin-top: 1rem;">Ask Jules</button>
+                    </form>
+                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 2rem; padding: 1.5rem; background: #fff; border-left: 4px solid #333; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h3 style="margin-top: 0;">Jules' Advice:</h3>
+                        <p id="recommendation-text" style="white-space: pre-wrap; line-height: 1.6;"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="try-on" class="try-on-section">
             <div class="container">
                 <h2>Try On Studio</h2>
+
+                <!-- Lafayette x TryOnYou Exclusive Section -->
+                <div class="exclusive-collection" style="margin-bottom: 2rem;">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; color: #d4af37;">⚜️ Lafayette x TryOnYou Exclusive</h3>
+                    <div class="product-grid" id="lafayette-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div class="product-item" onclick="selectProduct('cubist_jacket')" style="cursor: pointer; border: 1px solid #eee; padding: 1rem; text-align: center; transition: transform 0.3s;">
+                            <img src="/assets/catalog/cubist_jacket.png" alt="Cubist Art Jacket" class="product-img" style="width: 100%; height: 200px; object-fit: contain; background: #f0f0f0; margin-bottom: 1rem;">
+                            <div class="product-info">
+                                <span style="display: block; font-weight: bold;">Cubist Art Jacket</span>
+                                <small style="color: #666;">CAP-ART-001</small>
+                            </div>
+                        </div>
+                        <div class="product-item" onclick="selectProduct('peacock_blazer')" style="cursor: pointer; border: 1px solid #eee; padding: 1rem; text-align: center; transition: transform 0.3s;">
+                            <img src="/assets/catalog/peacock_blazer.png" alt="Peacock Couture Blazer" class="product-img" style="width: 100%; height: 200px; object-fit: contain; background: #f0f0f0; margin-bottom: 1rem;">
+                            <div class="product-info">
+                                <span style="display: block; font-weight: bold;">Peacock Couture Blazer</span>
+                                <small style="color: #666;">DIVINEO-LUX-007</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="try-on-interface">
                     <div class="camera-view">
                         <div class="camera-placeholder">
@@ -100,6 +155,6 @@
     </footer>
 
     <!-- Script de entrada de Vite -->
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>

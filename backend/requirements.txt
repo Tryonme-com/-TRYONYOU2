@@ -1,0 +1,6 @@
+google-generativeai
+fastapi
+uvicorn
+python-dotenv
+pydantic
+gunicorn

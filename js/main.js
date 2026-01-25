@@ -20,6 +20,12 @@ class TryOnYouApp {
             contactForm.addEventListener('submit', this.handleContactForm.bind(this));
         }
 
+        // Jules Consultation form
+        const julesForm = document.getElementById('jules-form');
+        if (julesForm) {
+            julesForm.addEventListener('submit', this.handleJulesConsultation.bind(this));
+        }
+
         // Navigation smooth scrolling
         document.querySelectorAll('.nav-menu a[href^="#"]').forEach(link => {
             link.addEventListener('click', this.handleNavClick.bind(this));
@@ -62,6 +68,58 @@ class TryOnYouApp {
         // Simulate form submission
         this.showNotification('Message sent successfully!', 'success');
         event.target.reset();
+    }
+
+    async handleJulesConsultation(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = {
+            height: parseFloat(formData.get('height')),
+            weight: parseFloat(formData.get('weight')),
+            event_type: formData.get('event_type')
+        };
+
+        const resultContainer = document.getElementById('jules-result');
+        const resultText = document.getElementById('recommendation-text');
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+
+        try {
+            submitBtn.textContent = 'Consulting Jules...';
+            submitBtn.disabled = true;
+
+            // Call Backend
+            // Assuming backend is running on localhost:8000
+            const response = await fetch('http://localhost:8000/api/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Jules is currently unavailable.');
+            }
+
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                resultContainer.style.display = 'block';
+                resultText.textContent = result.recommendation;
+                this.showNotification('Jules has a recommendation for you!', 'success');
+            } else {
+                throw new Error('Could not get recommendation.');
+            }
+
+        } catch (error) {
+            console.error(error);
+            this.showNotification('Error consulting Jules. Backend offline?', 'error');
+            resultContainer.style.display = 'block';
+            resultText.textContent = "Desolé. Jules is currently offline. Please ensure the backend server is running on port 8000.";
+        } finally {
+            submitBtn.textContent = 'Ask Jules';
+            submitBtn.disabled = false;
+        }
     }
 
     showNotification(message, type = 'info') {
