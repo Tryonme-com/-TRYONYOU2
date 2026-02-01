@@ -74,8 +74,8 @@ class TryOnYouApp {
         event.preventDefault();
         const formData = new FormData(event.target);
         const data = {
-            height: parseFloat(formData.get('height')),
-            weight: parseFloat(formData.get('weight')),
+            body_shape: formData.get('body_shape'),
+            fit_preference: formData.get('fit_preference'),
             event_type: formData.get('event_type')
         };
 
@@ -128,27 +128,7 @@ class TryOnYouApp {
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
         
-        // Style the notification
-        Object.assign(notification.style, {
-            position: 'fixed',
-            top: '100px',
-            right: '20px',
-            padding: '15px 20px',
-            borderRadius: '5px',
-            color: 'white',
-            fontWeight: '600',
-            zIndex: '10000',
-            transform: 'translateX(100%)',
-            transition: 'transform 0.3s ease'
-        });
-
-        // Set background color based on type
-        const colors = {
-            success: '#4CAF50',
-            error: '#f44336',
-            info: '#2196F3'
-        };
-        notification.style.backgroundColor = colors[type] || colors.info;
+        // Style is handled by CSS class to ensure safety compliance
 
         // Add to page
         document.body.appendChild(notification);
