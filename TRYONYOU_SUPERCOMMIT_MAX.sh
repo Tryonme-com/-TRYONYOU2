@@ -8,7 +8,7 @@ echo "🔥 AGENTE JULES: Iniciando consolidación de seguridad FIS v7.0..."
 echo "🛡️ Filtro biométrico activo: Cero métricas físicas en el código."
 # We check for the forbidden terms. If found, grep exits 0 (success), so we invert logic.
 # Added -w to avoid false positives like 'background' (matches kg) or 'fontWeight' (matches weight) if treated as words
-if grep -rEiw "kg|cm|weight|peso|talla" js/*.js *.html src/*.jsx 2>/dev/null | grep -v "node_modules"; then
+if grep -rEiw --exclude-dir=node_modules "kg|cm|weight|peso|talla" js/ *.html src/ 2>/dev/null; then
     echo "❌ CRITICAL: Biometric terms found! Aborting deployment to protect 'Experience without Complexes'."
     exit 1
 else
