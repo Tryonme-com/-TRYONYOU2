@@ -6,6 +6,7 @@
     <title>TryOnYou - Virtual Try-On Experience</title>
     <!-- El CSS será inyectado por Vite a través del JS de entrada -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
     <header class="header">
@@ -41,7 +42,7 @@
                     </div>
                     <div class="feature-card">
                         <h3>Perfect Fit</h3>
-                        <p>Get accurate sizing recommendations based on your measurements</p>
+                        <p>Get accurate sizing recommendations based on your unique body shape</p>
                     </div>
                     <div class="feature-card">
                         <h3>Wide Selection</h3>
@@ -58,15 +59,15 @@
                     <p style="text-align: center; margin-bottom: 2rem;">Get personalized high-end styling advice from Jules, powered by Gemini.</p>
                     <form id="jules-form" class="jules-form" style="display: flex; flex-direction: column; gap: 1rem;">
                         <div class="form-group" style="display: flex; flex-direction: column;">
-                            <label for="height" style="margin-bottom: 0.5rem; font-weight: bold;">Height (cm)</label>
-                            <input type="number" id="height" name="height" placeholder="e.g. 175" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <label for="body_shape" class="form-label">Body Shape</label>
+                            <input type="text" id="body_shape" name="body_shape" placeholder="e.g. Athletic, Curvy, Tall" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
                         </div>
                         <div class="form-group" style="display: flex; flex-direction: column;">
-                            <label for="weight" style="margin-bottom: 0.5rem; font-weight: bold;">Weight (kg)</label>
-                            <input type="number" id="weight" name="weight" placeholder="e.g. 68" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <label for="fit_preference" class="form-label">Fit Preference</label>
+                            <input type="text" id="fit_preference" name="fit_preference" placeholder="e.g. Loose, Fitted, Oversized" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
                         </div>
                         <div class="form-group" style="display: flex; flex-direction: column;">
-                            <label for="event_type" style="margin-bottom: 0.5rem; font-weight: bold;">Event Type</label>
+                            <label for="event_type" class="form-label">Event Type</label>
                             <select id="event_type" name="event_type" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
                                 <option value="Gala">Gala</option>
                                 <option value="Business">Business</option>
@@ -95,14 +96,14 @@
                         <div class="product-item" onclick="selectProduct('cubist_jacket')" style="cursor: pointer; border: 1px solid #eee; padding: 1rem; text-align: center; transition: transform 0.3s;">
                             <img src="/assets/catalog/cubist_jacket.png" alt="Cubist Art Jacket" class="product-img" style="width: 100%; height: 200px; object-fit: contain; background: #f0f0f0; margin-bottom: 1rem;">
                             <div class="product-info">
-                                <span style="display: block; font-weight: bold;">Cubist Art Jacket</span>
+                                <span class="product-title">Cubist Art Jacket</span>
                                 <small style="color: #666;">CAP-ART-001</small>
                             </div>
                         </div>
                         <div class="product-item" onclick="selectProduct('peacock_blazer')" style="cursor: pointer; border: 1px solid #eee; padding: 1rem; text-align: center; transition: transform 0.3s;">
                             <img src="/assets/catalog/peacock_blazer.png" alt="Peacock Couture Blazer" class="product-img" style="width: 100%; height: 200px; object-fit: contain; background: #f0f0f0; margin-bottom: 1rem;">
                             <div class="product-info">
-                                <span style="display: block; font-weight: bold;">Peacock Couture Blazer</span>
+                                <span class="product-title">Peacock Couture Blazer</span>
                                 <small style="color: #666;">DIVINEO-LUX-007</small>
                             </div>
                         </div>
