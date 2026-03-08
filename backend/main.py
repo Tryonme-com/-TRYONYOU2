@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from models import UserScan, GARMENT_DB
 from jules_engine import get_jules_advice
@@ -18,7 +19,17 @@ async def recommend_garment(scan: UserScan):
     # Logic: For the pilot, we pick the first garment or match by event_type
     selected_garment = GARMENT_DB[0]
 
-    recommendation = get_jules_advice(scan, selected_garment)
+    try:
+        recommendation = get_jules_advice(scan, selected_garment)
+    except Exception:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "error",
+                "code": 503,
+                "message": "Jules AI Engine is currently recalibrating or unavailable. Please try again."
+            }
+        )
 
     return {
         "garment_name": selected_garment["name"],
