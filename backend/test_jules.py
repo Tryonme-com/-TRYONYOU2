@@ -1,7 +1,6 @@
 import sys
 import os
 import asyncio
-import json
 
 # Ensure we can import from the same directory
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
