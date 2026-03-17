@@ -8,7 +8,12 @@ app = FastAPI(title="Divineo AI Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for the pilot
+    # Restrict origins for security, especially when allow_credentials=True
+    allow_origins=[
+        "http://localhost:5173",
+        "https://tryonyou.app",
+        "https://www.tryonyou.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

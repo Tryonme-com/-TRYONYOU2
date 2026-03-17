@@ -1,10 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Dict, List
 
 class UserScan(BaseModel):
-    height: float
-    weight: float
-    event_type: str  # e.g., 'Gala', 'Business', 'Cocktail'
+    # Add validation to prevent malformed or malicious input
+    height: float = Field(..., gt=50, lt=250, description="Height in cm")
+    weight: float = Field(..., gt=20, lt=300, description="Weight in kg")
+    event_type: str = Field(..., min_length=1, max_length=100)
 
 class Garment(BaseModel):
     id: str
