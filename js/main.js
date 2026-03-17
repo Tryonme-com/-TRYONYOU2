@@ -55,9 +55,9 @@ class TryOnYouApp {
         event.preventDefault();
         
         const formData = new FormData(event.target);
-        const name = formData.get('name') || event.target.querySelector('input[type="text"]').value;
-        const email = formData.get('email') || event.target.querySelector('input[type="email"]').value;
-        const message = formData.get('message') || event.target.querySelector('textarea').value;
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const message = formData.get('message');
 
         // Simple validation
         if (!name || !email || !message) {
@@ -128,6 +128,10 @@ class TryOnYouApp {
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
         
+        // Add accessibility attributes
+        notification.setAttribute('role', 'status');
+        notification.setAttribute('aria-live', 'polite');
+
         // Style is handled by CSS class to ensure safety compliance
 
         // Add to page
