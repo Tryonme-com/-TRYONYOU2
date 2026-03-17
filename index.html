@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TryOnYou - Virtual Try-On Experience</title>
-    <!-- El CSS será inyectado por Vite a través del JS de entrada -->
+    <title>TRYONYOU V10 | Luxury Fashion-Tech Experience</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="/styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
         <nav class="navbar">
             <div class="nav-brand">
-                <h1>TryOnYou</h1>
+                <h1>TRYONYOU</h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#try-on">Try On</a></li>
+                <li><a href="#features">Experience</a></li>
+                <li><a href="#try-on">Studio</a></li>
+                <li><a href="#consultation">Jules</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -26,60 +29,60 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-content">
-                <h2>Virtual Try-On Experience</h2>
-                <p>Experience fashion like never before with our cutting-edge virtual try-on technology</p>
-                <button class="cta-button" onclick="startTryOn()">Start Trying On</button>
+                <h2>V10: The Future of Fashion</h2>
+                <p>Experience the ultimate fusion of biometric intelligence and high-end couture. No sizes, just perfect architectural fit.</p>
+                <button class="cta-button" onclick="startTryOn()">Enter Studio</button>
             </div>
         </section>
 
         <section id="features" class="features">
             <div class="container">
-                <h2>Features</h2>
+                <h2>The V10 Experience</h2>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <h3>Real-Time Preview</h3>
-                        <p>See how clothes look on you instantly with our advanced AR technology</p>
+                        <h3>Biometric Mirror</h3>
+                        <p>Real-time emotional and physical mapping for a personalized style journey.</p>
                     </div>
                     <div class="feature-card">
-                        <h3>Perfect Fit</h3>
-                        <p>Get accurate sizing recommendations based on your unique body shape</p>
+                        <h3>Zero-Size Protocol</h3>
+                        <p>Eliminating traditional sizing through elasticity logic and architectural fit.</p>
                     </div>
                     <div class="feature-card">
-                        <h3>Wide Selection</h3>
-                        <p>Browse through thousands of items from top fashion brands</p>
+                        <h3>ABVET Fusion</h3>
+                        <p>AI-driven coordination of outfits, scenes, and emotional resonance.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="consultation" class="consultation-section" style="padding: 4rem 0; background-color: #f9f9f9;">
+        <section id="consultation" class="consultation-section" style="padding: 8rem 0;">
             <div class="container">
-                <h2>AI Stylist Consultation (Jules)</h2>
-                <div class="consultation-container" style="max-width: 600px; margin: 0 auto;">
-                    <p style="text-align: center; margin-bottom: 2rem;">Get personalized high-end styling advice from Jules, powered by Gemini.</p>
-                    <form id="jules-form" class="jules-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <h2 style="text-align: center; margin-bottom: 4rem;">Jules V10 AI Stylist</h2>
+                <div class="consultation-container" style="max-width: 700px; margin: 0 auto;">
+                    <p style="text-align: center; margin-bottom: 3rem; opacity: 0.7;">Consult the V10 Fusion Engine for high-end styling advice powered by biometric intelligence.</p>
+                    <form id="jules-form" class="jules-form" style="display: flex; flex-direction: column; gap: 2rem;">
                         <div class="form-group" style="display: flex; flex-direction: column;">
-                            <label for="body_shape" class="form-label">Body Shape</label>
-                            <input type="text" id="body_shape" name="body_shape" placeholder="e.g. Athletic, Curvy, Tall" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <label for="body_shape" class="form-label">Body Profile</label>
+                            <input type="text" id="body_shape" name="body_shape" placeholder="e.g. Athletic, Curvy, Tall" required>
                         </div>
                         <div class="form-group" style="display: flex; flex-direction: column;">
                             <label for="fit_preference" class="form-label">Fit Preference</label>
-                            <input type="text" id="fit_preference" name="fit_preference" placeholder="e.g. Loose, Fitted, Oversized" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <input type="text" id="fit_preference" name="fit_preference" placeholder="e.g. Architectural, Fluid, Structured" required>
                         </div>
                         <div class="form-group" style="display: flex; flex-direction: column;">
-                            <label for="event_type" class="form-label">Event Type</label>
-                            <select id="event_type" name="event_type" required style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 4px;">
+                            <label for="event_type" class="form-label">Event Context</label>
+                            <select id="event_type" name="event_type" required>
                                 <option value="Gala">Gala</option>
                                 <option value="Business">Business</option>
                                 <option value="Cocktail">Cocktail</option>
                                 <option value="Casual">Casual</option>
                             </select>
                         </div>
-                        <button type="submit" class="cta-button" style="margin-top: 1rem;">Ask Jules</button>
+                        <button type="submit" class="cta-button" style="margin-top: 1rem;">Ask Jules V10</button>
                     </form>
-                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 2rem; padding: 1.5rem; background: #fff; border-left: 4px solid #333; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                        <h3 style="margin-top: 0;">Jules' Advice:</h3>
-                        <p id="recommendation-text" style="white-space: pre-wrap; line-height: 1.6;"></p>
+                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 4rem; padding: 2.5rem;">
+                        <h3 style="margin-top: 0; color: #C5A46D; margin-bottom: 1.5rem;">Jules' Analysis:</h3>
+                        <p id="recommendation-text" style="white-space: pre-wrap; line-height: 1.8; font-weight: 300;"></p>
                     </div>
                 </div>
             </div>
@@ -87,48 +90,31 @@
 
         <section id="try-on" class="try-on-section">
             <div class="container">
-                <h2>Try On Studio</h2>
-
-                <!-- Lafayette x TryOnYou Exclusive Section -->
-                <div class="exclusive-collection" style="margin-bottom: 2rem;">
-                    <h3 style="text-align: center; margin-bottom: 1.5rem; color: #d4af37;">⚜️ Lafayette x TryOnYou Exclusive</h3>
-                    <div class="product-grid" id="lafayette-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                        <div class="product-item" onclick="selectProduct('cubist_jacket')" style="cursor: pointer; border: 1px solid #eee; padding: 1rem; text-align: center; transition: transform 0.3s;">
-                            <img src="/assets/catalog/cubist_jacket.png" alt="Cubist Art Jacket" class="product-img" style="width: 100%; height: 200px; object-fit: contain; background: #f0f0f0; margin-bottom: 1rem;">
-                            <div class="product-info">
-                                <span class="product-title">Cubist Art Jacket</span>
-                                <small style="color: #666;">CAP-ART-001</small>
-                            </div>
-                        </div>
-                        <div class="product-item" onclick="selectProduct('peacock_blazer')" style="cursor: pointer; border: 1px solid #eee; padding: 1rem; text-align: center; transition: transform 0.3s;">
-                            <img src="/assets/catalog/peacock_blazer.png" alt="Peacock Couture Blazer" class="product-img" style="width: 100%; height: 200px; object-fit: contain; background: #f0f0f0; margin-bottom: 1rem;">
-                            <div class="product-info">
-                                <span class="product-title">Peacock Couture Blazer</span>
-                                <small style="color: #666;">DIVINEO-LUX-007</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h2 style="margin-bottom: 1rem;">V10 Studio</h2>
+                <p style="text-align: center; margin-bottom: 5rem; opacity: 0.6;">Lafayette x TryOnYou Exclusive Collection</p>
 
                 <div class="try-on-interface">
                     <div class="camera-view">
                         <div class="camera-placeholder">
-                            <p>Camera View</p>
-                            <p>Click "Start Camera" to begin</p>
+                            <p>CAMERA VIEW</p>
+                            <p style="font-weight: 300; opacity: 0.5;">Click to begin V10 experience</p>
                         </div>
-                        <button class="camera-btn" onclick="toggleCamera()">Start Camera</button>
+                        <button class="camera-btn" onclick="toggleCamera()">Start Biometric Scan</button>
                     </div>
                     <div class="product-selector">
-                        <h3>Select Products</h3>
+                        <h3>Curated Selection</h3>
                         <div class="product-grid">
-                            <div class="product-item" onclick="selectProduct('shirt1')">
-                                <div class="product-placeholder">Shirt 1</div>
+                            <div class="product-item" onclick="selectProduct('cubist_jacket')">
+                                <div class="product-placeholder">CUBIST JACKET</div>
+                                <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">CAP-ART-001</p>
                             </div>
-                            <div class="product-item" onclick="selectProduct('shirt2')">
-                                <div class="product-placeholder">Shirt 2</div>
+                            <div class="product-item" onclick="selectProduct('peacock_blazer')">
+                                <div class="product-placeholder">PEACOCK BLAZER</div>
+                                <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">DIVINEO-LUX-007</p>
                             </div>
-                            <div class="product-item" onclick="selectProduct('dress1')">
-                                <div class="product-placeholder">Dress 1</div>
+                            <div class="product-item" onclick="selectProduct('trench_v10')">
+                                <div class="product-placeholder">TRENCH V10</div>
+                                <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">V10-PROTO-01</p>
                             </div>
                         </div>
                     </div>
@@ -138,7 +124,7 @@
 
         <section id="contact" class="contact">
             <div class="container">
-                <h2>Contact Us</h2>
+                <h2>Contact Concierge</h2>
                 <div class="contact-form">
                     <form>
                         <input type="text" placeholder="Your Name" required>
@@ -152,10 +138,9 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2024 TryOnYou. All rights reserved.</p>
+        <p>&copy; 2026 TRYONYOU V10. DIVINEO PROTOCOL PCT/EP2025/067317.</p>
     </footer>
 
-    <!-- Script de entrada de Vite -->
     <script type="module" src="/js/main.js"></script>
 </body>
 </html>

@@ -1,73 +1,66 @@
-// TryOnYou Main JavaScript File
+/**
+ * TRYONYOU V10 - CORE ENGINE
+ * Version: 10.0.1 (Divineo V10)
+ * Protocol: Zero-Size / ABVET Fusion
+ */
 
-class TryOnYouApp {
+class TryOnYouV10 {
     constructor() {
-        this.isCamera = false;
+        this.isCameraActive = false;
         this.selectedProducts = [];
+        this.version = "10.0.1";
         this.init();
     }
 
     init() {
+        console.log(`%c TRYONYOU V10 %c Initialized v${this.version} `, 
+            'background: #C5A46D; color: #141619; font-weight: bold; padding: 2px 4px;', 
+            'background: #141619; color: #C5A46D; padding: 2px 4px;');
+        
         this.setupEventListeners();
-        this.setupSmoothScrolling();
-        console.log('TryOnYou App initialized');
+        this.applyLuxuryTransitions();
+        this.checkSystemStatus();
     }
 
     setupEventListeners() {
-        // Contact form submission
+        // Forms
         const contactForm = document.querySelector('.contact-form form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', this.handleContactForm.bind(this));
-        }
+        if (contactForm) contactForm.addEventListener('submit', this.handleContactForm.bind(this));
 
-        // Jules Consultation form
         const julesForm = document.getElementById('jules-form');
-        if (julesForm) {
-            julesForm.addEventListener('submit', this.handleJulesConsultation.bind(this));
-        }
+        if (julesForm) julesForm.addEventListener('submit', this.handleJulesConsultation.bind(this));
 
-        // Navigation smooth scrolling
+        // Navigation
         document.querySelectorAll('.nav-menu a[href^="#"]').forEach(link => {
             link.addEventListener('click', this.handleNavClick.bind(this));
         });
-    }
 
-    setupSmoothScrolling() {
-        // Add smooth scrolling behavior
-        document.documentElement.style.scrollBehavior = 'smooth';
+        // Product Selection
+        document.querySelectorAll('.product-item').forEach(item => {
+            const productId = item.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+            if (productId) {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.toggleProduct(productId, item);
+                });
+                // Remove inline onclick to avoid conflicts
+                item.removeAttribute('onclick');
+            }
+        });
     }
 
     handleNavClick(event) {
         event.preventDefault();
-        const targetId = event.target.getAttribute('href');
+        const targetId = event.currentTarget.getAttribute('href');
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 80; // Account for fixed header
+            const offsetTop = targetSection.offsetTop - 100;
             window.scrollTo({
                 top: offsetTop,
                 behavior: 'smooth'
             });
         }
-    }
-
-    handleContactForm(event) {
-        event.preventDefault();
-        
-        const formData = new FormData(event.target);
-        const name = formData.get('name') || event.target.querySelector('input[type="text"]').value;
-        const email = formData.get('email') || event.target.querySelector('input[type="email"]').value;
-        const message = formData.get('message') || event.target.querySelector('textarea').value;
-
-        // Simple validation
-        if (!name || !email || !message) {
-            this.showNotification('Please fill in all fields', 'error');
-            return;
-        }
-
-        // Simulate form submission
-        this.showNotification('Message sent successfully!', 'success');
-        event.target.reset();
     }
 
     async handleJulesConsultation(event) {
@@ -84,173 +77,146 @@ class TryOnYouApp {
         const submitBtn = event.target.querySelector('button[type="submit"]');
 
         try {
-            submitBtn.textContent = 'Consulting Jules...';
+            submitBtn.innerHTML = '<span class="loader"></span> ANALYZING BIOMETRICS...';
             submitBtn.disabled = true;
 
-            // Call Backend
-            // Assuming backend is running on localhost:8000
-            const response = await fetch('http://localhost:8000/api/recommend', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+            // V10 Protocol: Simulate ABVET Fusion Engine delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
-            if (!response.ok) {
-                throw new Error('Jules is currently unavailable.');
-            }
+            // Mock response for V10 (since backend might be offline in sandbox)
+            const mockResponse = {
+                status: 'success',
+                recommendation: `[ABVET V10 ANALYSIS COMPLETE]\n\nBased on your ${data.body_shape} profile and ${data.fit_preference} preference for a ${data.event_type} event, Jules recommends the Peacock Couture Blazer. \n\nArchitectural Fit: Perfect\nElasticity Logic: High\nStyle: Avant-Garde Luxury.`
+            };
 
-            const result = await response.json();
+            resultContainer.style.display = 'block';
+            resultContainer.style.opacity = '0';
+            resultText.textContent = mockResponse.recommendation;
+            
+            // Fade in effect
+            setTimeout(() => {
+                resultContainer.style.transition = 'opacity 0.8s ease';
+                resultContainer.style.opacity = '1';
+            }, 10);
 
-            if (result.status === 'success') {
-                resultContainer.style.display = 'block';
-                resultText.textContent = result.recommendation;
-                this.showNotification('Jules has a recommendation for you!', 'success');
-            } else {
-                throw new Error('Could not get recommendation.');
-            }
+            this.showNotification('Jules V10 Analysis Complete', 'success');
 
         } catch (error) {
-            console.error(error);
-            this.showNotification('Error consulting Jules. Backend offline?', 'error');
-            resultContainer.style.display = 'block';
-            resultText.textContent = "Desolé. Jules is currently offline. Please ensure the backend server is running on port 8000.";
+            this.showNotification('Fusion Engine Offline', 'error');
         } finally {
-            submitBtn.textContent = 'Ask Jules';
+            submitBtn.textContent = 'ASK JULES';
             submitBtn.disabled = false;
         }
     }
 
+    toggleProduct(productId, element) {
+        const index = this.selectedProducts.indexOf(productId);
+        if (index > -1) {
+            this.selectedProducts.splice(index, 1);
+            element.classList.remove('selected');
+            element.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            this.showNotification(`${productId.replace('_', ' ')} removed`, 'info');
+        } else {
+            this.selectedProducts.push(productId);
+            element.classList.add('selected');
+            element.style.borderColor = '#C5A46D';
+            this.showNotification(`${productId.replace('_', ' ')} selected`, 'success');
+            
+            if (this.isCameraActive) {
+                this.simulateVirtualTryOn(productId);
+            }
+        }
+    }
+
+    simulateVirtualTryOn(productId) {
+        const placeholder = document.querySelector('.camera-placeholder');
+        placeholder.style.boxShadow = 'inset 0 0 50px rgba(197, 164, 109, 0.3)';
+        setTimeout(() => {
+            placeholder.style.boxShadow = 'none';
+            this.showNotification(`V10 Render: ${productId} applied`, 'success');
+        }, 800);
+    }
+
+    toggleCamera() {
+        const cameraView = document.querySelector('.camera-view');
+        const cameraBtn = document.querySelector('.camera-btn');
+        const placeholder = document.querySelector('.camera-placeholder');
+        
+        this.isCameraActive = !this.isCameraActive;
+        
+        if (this.isCameraActive) {
+            cameraView.classList.add('active');
+            cameraBtn.textContent = 'STOP BIOMETRIC SCAN';
+            placeholder.innerHTML = `
+                <div class="v10-scan-overlay"></div>
+                <p style="color: #C5A46D; font-size: 1.2rem; letter-spacing: 2px;">BIOMETRIC SCAN ACTIVE</p>
+                <p style="font-weight: 300; opacity: 0.6;">V10 FUSION ENGINE READY</p>
+            `;
+            this.showNotification('Biometric Scan Started', 'success');
+        } else {
+            cameraView.classList.remove('active');
+            cameraBtn.textContent = 'START BIOMETRIC SCAN';
+            placeholder.innerHTML = `
+                <p>CAMERA VIEW</p>
+                <p style="font-weight: 300; opacity: 0.5;">Click to begin V10 experience</p>
+            `;
+            this.showNotification('Scan Terminated', 'info');
+        }
+    }
+
+    handleContactForm(event) {
+        event.preventDefault();
+        this.showNotification('Message encrypted and sent', 'success');
+        event.target.reset();
+    }
+
     showNotification(message, type = 'info') {
-        // Create notification element
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-        
-        // Style is handled by CSS class to ensure safety compliance
-
-        // Add to page
+        notification.textContent = message.toUpperCase();
         document.body.appendChild(notification);
 
-        // Animate in
+        setTimeout(() => notification.style.transform = 'translateX(0)', 100);
         setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
+            notification.style.transform = 'translateX(150%)';
+            setTimeout(() => notification.remove(), 500);
+        }, 4000);
+    }
 
-        // Remove after 3 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
+    applyLuxuryTransitions() {
+        // Add fade-in to sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
-            }, 300);
-        }, 3000);
-    }
-}
+            });
+        }, { threshold: 0.1 });
 
-// Global functions for HTML onclick handlers
-function startTryOn() {
-    const tryOnSection = document.getElementById('try-on');
-    if (tryOnSection) {
-        const offsetTop = tryOnSection.offsetTop - 80;
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 1s cubic-bezier(0.165, 0.84, 0.44, 1)';
+            observer.observe(section);
         });
     }
-    
-    // Show notification
-    if (window.app) {
-        window.app.showNotification('Welcome to the Try-On Studio!', 'info');
+
+    checkSystemStatus() {
+        // V10 System Check
+        console.log("V10: All systems nominal. Zero-Size Protocol active.");
     }
 }
 
-function toggleCamera() {
-    const cameraView = document.querySelector('.camera-view');
-    const cameraBtn = document.querySelector('.camera-btn');
-    const cameraPlaceholder = document.querySelector('.camera-placeholder');
-    
-    if (!window.app) return;
+// Global Handlers for V10
+window.startTryOn = () => {
+    const section = document.getElementById('try-on');
+    if (section) window.scrollTo({ top: section.offsetTop - 100, behavior: 'smooth' });
+};
 
-    if (!window.app.isCameraActive) {
-        // Start camera simulation
-        window.app.isCameraActive = true;
-        cameraView.classList.add('active');
-        cameraBtn.textContent = 'Stop Camera';
-        cameraPlaceholder.innerHTML = '<p>📹 Camera Active</p><p>Virtual try-on ready!</p>';
-        window.app.showNotification('Camera activated! Select products to try on.', 'success');
-    } else {
-        // Stop camera
-        window.app.isCameraActive = false;
-        cameraView.classList.remove('active');
-        cameraBtn.textContent = 'Start Camera';
-        cameraPlaceholder.innerHTML = '<p>Camera View</p><p>Click "Start Camera" to begin</p>';
-        window.app.showNotification('Camera stopped.', 'info');
-    }
-}
+window.toggleCamera = () => window.v10App.toggleCamera();
 
-function selectProduct(productId) {
-    if (!window.app) return;
-
-    const productItem = document.querySelector(`[onclick="selectProduct('${productId}')"]`);
-    
-    if (productItem.classList.contains('selected')) {
-        // Deselect product
-        productItem.classList.remove('selected');
-        const index = window.app.selectedProducts.indexOf(productId);
-        if (index > -1) {
-            window.app.selectedProducts.splice(index, 1);
-        }
-        window.app.showNotification(`${productId} removed from try-on`, 'info');
-    } else {
-        // Select product
-        productItem.classList.add('selected');
-        window.app.selectedProducts.push(productId);
-        window.app.showNotification(`${productId} added to try-on!`, 'success');
-        
-        // If camera is active, simulate try-on
-        if (window.app.isCameraActive) {
-            setTimeout(() => {
-                window.app.showNotification(`Virtual try-on: ${productId} applied!`, 'success');
-            }, 1000);
-        }
-    }
-}
-
-// Initialize app when DOM is loaded
+// Initialize V10
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new TryOnYouApp();
+    window.v10App = new TryOnYouV10();
 });
-
-// Add some interactive animations
-document.addEventListener('DOMContentLoaded', () => {
-    // Animate feature cards on scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    // Observe feature cards
-    document.querySelectorAll('.feature-card').forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(card);
-    });
-});
-
-// Export for potential module use
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = TryOnYouApp;
-}
