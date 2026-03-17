@@ -20,7 +20,7 @@ async def recommend_garment(scan: UserScan):
     selected_garment = GARMENT_DB[0]
 
     try:
-        recommendation = get_jules_advice(scan, selected_garment)
+        recommendation = await get_jules_advice(scan, selected_garment)
     except Exception:
         return JSONResponse(
             status_code=503,

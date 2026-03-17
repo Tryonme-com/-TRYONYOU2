@@ -2,9 +2,11 @@ from pydantic import BaseModel
 from typing import Dict, List
 
 class UserScan(BaseModel):
-    height: float
-    weight: float
+    height: float = 0.0
+    weight: float = 0.0
     event_type: str  # e.g., 'Gala', 'Business', 'Cocktail'
+    body_shape: str = ""
+    fit_preference: str = ""
 
 class Garment(BaseModel):
     id: str
