@@ -344,6 +344,22 @@ body {
     margin-bottom: 0.5rem;
     font-weight: bold;
 }
+
+.contact-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.contact-form .cta-button {
+    width: 100%;
+    border-radius: 5px; /* Match original contact button style but keep CTA colors */
+}
+
+.required {
+    color: #ff6b6b;
+}
 .product-title {
     display: block;
     font-weight: bold;
