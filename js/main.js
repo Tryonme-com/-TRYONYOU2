@@ -190,6 +190,8 @@ class TryOnYouV10 {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    // Performance: Unobserve once the section is revealed to reduce observer overhead
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
