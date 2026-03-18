@@ -36,3 +36,16 @@ def test_recommend_garment_engine_failure(monkeypatch):
         "code": 503,
         "message": "Jules AI Engine is currently recalibrating or unavailable. Please try again."
     }
+
+def test_recommend_garment_validation_error():
+    """
+    Test that the /api/recommend endpoint returns 422 Unprocessable Entity
+    when invalid data is provided (e.g., negative height).
+    """
+    payload = {
+        "height": -1.0,  # Invalid: must be >= 50
+        "weight": 68.0,
+        "event_type": "Gala"
+    }
+    response = client.post("/api/recommend", json=payload)
+    assert response.status_code == 422
