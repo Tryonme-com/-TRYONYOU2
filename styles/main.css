@@ -328,6 +328,20 @@ body {
     color: var(--text-beige);
 }
 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
 .contact-form input,
 .contact-form textarea {
     background: var(--bg-dark);
@@ -335,6 +349,11 @@ body {
     color: var(--text-beige);
     padding: 1.2rem;
     font-size: 1rem;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 4px;
 }
 
 .contact-form button {
@@ -349,7 +368,7 @@ body {
 /* Footer */
 .footer {
     background: #050505;
-    color: rgba(245, 239, 230, 0.4);
+    color: rgba(245, 239, 230, 0.7);
     text-align: center;
     padding: 4rem 0;
     border-top: 1px solid var(--glass-border);
