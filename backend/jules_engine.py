@@ -17,6 +17,9 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
+# Performance: In-memory cache for Jules' recommendations to reduce LLM latency and cost.
+_advice_cache = {}
+
 def get_jules_advice(user_data, garment):
     """
     Generates an emotional styling tip without mentioning body numbers or sizes.
@@ -29,6 +32,12 @@ def get_jules_advice(user_data, garment):
         garment_data = garment.dict()
     else:
         garment_data = garment
+
+    # Create a cache key based on the event type, body profile (height/weight), and garment ID/name
+    # This ensures personalization is preserved while still caching redundant requests
+    cache_key = f"{user_data.event_type}:{user_data.height}:{user_data.weight}:{garment_data.get('id', garment_data.get('name'))}"
+    if cache_key in _advice_cache:
+        return _advice_cache[cache_key]
 
     prompt = f"""
     You are 'Jules', a high-end fashion consultant at Galeries Lafayette.
@@ -50,4 +59,5 @@ def get_jules_advice(user_data, garment):
     """
 
     response = model.generate_content(prompt)
+    _advice_cache[cache_key] = response.text
     return response.text
