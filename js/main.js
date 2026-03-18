@@ -1,19 +1,19 @@
 /**
  * TRYONYOU V10 - CORE ENGINE
- * Version: 10.0.1 (Divineo V10)
- * Protocol: Zero-Size / ABVET Fusion
+ * Version: 10.0.2 (Divineo V10 + Cursor Orchestration)
+ * Protocol: Zero-Size / ABVET Fusion / Private Pass
  */
 
 class TryOnYouV10 {
     constructor() {
         this.isCameraActive = false;
         this.selectedProducts = [];
-        this.version = "10.0.1";
+        this.version = "10.0.2";
         this.init();
     }
 
     init() {
-        console.log(`%c TRYONYOU V10 %c Initialized v${this.version} `, 
+        console.log(`%c TRYONYOU V10 %c Initialized v${this.version} with Cursor Optimization `, 
             'background: #C5A46D; color: #141619; font-weight: bold; padding: 2px 4px;', 
             'background: #141619; color: #C5A46D; padding: 2px 4px;');
         
@@ -43,7 +43,6 @@ class TryOnYouV10 {
                     e.preventDefault();
                     this.toggleProduct(productId, item);
                 });
-                // Remove inline onclick to avoid conflicts
                 item.removeAttribute('onclick');
             }
         });
@@ -80,10 +79,8 @@ class TryOnYouV10 {
             submitBtn.innerHTML = '<span class="loader"></span> ANALYZING BIOMETRICS...';
             submitBtn.disabled = true;
 
-            // V10 Protocol: Simulate ABVET Fusion Engine delay
             await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // Mock response for V10 (since backend might be offline in sandbox)
             const mockResponse = {
                 status: 'success',
                 recommendation: `[ABVET V10 ANALYSIS COMPLETE]\n\nBased on your ${data.body_shape} profile and ${data.fit_preference} preference for a ${data.event_type} event, Jules recommends the Peacock Couture Blazer. \n\nArchitectural Fit: Perfect\nElasticity Logic: High\nStyle: Avant-Garde Luxury.`
@@ -93,7 +90,6 @@ class TryOnYouV10 {
             resultContainer.style.opacity = '0';
             resultText.textContent = mockResponse.recommendation;
             
-            // Fade in effect
             setTimeout(() => {
                 resultContainer.style.transition = 'opacity 0.8s ease';
                 resultContainer.style.opacity = '1';
@@ -184,7 +180,6 @@ class TryOnYouV10 {
     }
 
     applyLuxuryTransitions() {
-        // Add fade-in to sections
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -203,8 +198,31 @@ class TryOnYouV10 {
     }
 
     checkSystemStatus() {
-        // V10 System Check
         console.log("V10: All systems nominal. Zero-Size Protocol active.");
+    }
+
+    // Private Pass Logic
+    requestPrivatePass() {
+        const modal = document.getElementById('private-pass-modal');
+        modal.style.display = 'flex';
+    }
+
+    closePrivatePass() {
+        const modal = document.getElementById('private-pass-modal');
+        modal.style.display = 'none';
+    }
+
+    verifyPrivatePass() {
+        const input = document.getElementById('private-pass-input');
+        if (input.value === "SAC_MUSEUM_2026") {
+            this.showNotification('ACCESO CONCEDIDO: CURADOR AUTORIZADO', 'success');
+            setTimeout(() => {
+                window.location.href = "/staff-dashboard"; // Placeholder for private area
+            }, 1500);
+        } else {
+            this.showNotification('ACCESO DENEGADO: CREDENCIAL INVÁLIDA', 'error');
+            input.value = "";
+        }
     }
 }
 
@@ -215,6 +233,9 @@ window.startTryOn = () => {
 };
 
 window.toggleCamera = () => window.v10App.toggleCamera();
+window.requestPrivatePass = () => window.v10App.requestPrivatePass();
+window.closePrivatePass = () => window.v10App.closePrivatePass();
+window.verifyPrivatePass = () => window.v10App.verifyPrivatePass();
 
 // Initialize V10
 document.addEventListener('DOMContentLoaded', () => {
