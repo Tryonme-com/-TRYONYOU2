@@ -21,7 +21,7 @@
                 <li><a href="#features">Experience</a></li>
                 <li><a href="#try-on">Studio</a></li>
                 <li><a href="#consultation">Jules</a></li>
-                <li><a href="javascript:void(0)" onclick="requestPrivatePass()">Staff Access</a></li>
+                <li><a href="javascript:void(0)" onclick="requestPrivatePass()" role="button">Staff Access</a></li>
             </ul>
         </nav>
     </header>
@@ -63,15 +63,15 @@
                     <form id="jules-form" class="jules-form" style="display: flex; flex-direction: column; gap: 2rem;">
                         <div class="form-group" style="display: flex; flex-direction: column;">
                             <label for="body_shape" class="form-label">Body Profile</label>
-                            <input type="text" id="body_shape" name="body_shape" placeholder="e.g. Athletic, Curvy, Tall" required>
+                            <input type="text" id="body_shape" name="body_shape" placeholder="e.g. Athletic, Curvy, Tall" required aria-required="true">
                         </div>
                         <div class="form-group" style="display: flex; flex-direction: column;">
                             <label for="fit_preference" class="form-label">Fit Preference</label>
-                            <input type="text" id="fit_preference" name="fit_preference" placeholder="e.g. Architectural, Fluid, Structured" required>
+                            <input type="text" id="fit_preference" name="fit_preference" placeholder="e.g. Architectural, Fluid, Structured" required aria-required="true">
                         </div>
                         <div class="form-group" style="display: flex; flex-direction: column;">
                             <label for="event_type" class="form-label">Event Context</label>
-                            <select id="event_type" name="event_type" required>
+                            <select id="event_type" name="event_type" required aria-required="true">
                                 <option value="Gala">Gala</option>
                                 <option value="Business">Business</option>
                                 <option value="Cocktail">Cocktail</option>
@@ -80,7 +80,7 @@
                         </div>
                         <button type="submit" class="cta-button" style="margin-top: 1rem;">Ask Jules V10</button>
                     </form>
-                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 4rem; padding: 2.5rem;">
+                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 4rem; padding: 2.5rem;" aria-live="polite">
                         <h3 style="margin-top: 0; color: #C5A46D; margin-bottom: 1.5rem;">Jules' Analysis:</h3>
                         <p id="recommendation-text" style="white-space: pre-wrap; line-height: 1.8; font-weight: 300;"></p>
                     </div>
