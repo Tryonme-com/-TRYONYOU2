@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "tryonyou-app",
+  "name": "tryonyou-org",
   "builds": [
     {
       "src": "package.json",
