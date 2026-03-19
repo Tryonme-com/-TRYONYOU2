@@ -9,8 +9,8 @@ app = FastAPI(title="Divineo AI Backend")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow all origins for the pilot
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
