@@ -17,26 +17,24 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-def get_jules_advice(user_data, garment):
-    """
-    Generates an emotional styling tip without mentioning body numbers or sizes.
-    """
-    # garment is a dict (from GARMENT_DB) or Garment object.
-    # The prompt usage implies dict access: garment['name']
+# Performance Optimization: Bounded in-memory cache for LLM recommendations
+# Reduces latency and API costs for identical user/garment combinations
+# Bounded to 128 entries to prevent unbounded memory growth (memory leak)
+from functools import lru_cache
 
-    # Handle both dict and Pydantic model
-    if hasattr(garment, 'dict'):
-        garment_data = garment.dict()
-    else:
-        garment_data = garment
-
+@lru_cache(maxsize=128)
+def _get_cached_advice(event_type, height, weight, garment_id, drape, elasticity, garment_name):
+    """
+    Internal helper to use functools.lru_cache for memoization.
+    Arguments must be hashable.
+    """
     prompt = f"""
     You are 'Jules', a high-end fashion consultant at Galeries Lafayette.
-    A client is interested in the '{garment_data['name']}' for a {user_data.event_type}.
+    A client is interested in the '{garment_name}' for a {event_type}.
 
     Technical Context:
-    - Fabric Drape: {garment_data['drape']}
-    - Fabric Elasticity: {garment_data['elasticity']}
+    - Fabric Drape: {drape}
+    - Fabric Elasticity: {elasticity}
 
     Task:
     Explain why this garment is the perfect choice for their silhouette based
@@ -51,3 +49,31 @@ def get_jules_advice(user_data, garment):
 
     response = model.generate_content(prompt)
     return response.text
+
+def get_jules_advice(user_data, garment):
+    """
+    Generates an emotional styling tip without mentioning body numbers or sizes.
+    Uses an LRU cache to store and reuse recommendations.
+    """
+    # Handle both dict and Pydantic model
+    if hasattr(garment, 'dict'):
+        garment_data = garment.dict()
+    else:
+        garment_data = garment
+
+    # Normalization: Round metrics to nearest integer to improve cache hit rate
+    # slightly different sensor readings shouldn't trigger new LLM calls
+    rounded_height = round(user_data.height)
+    rounded_weight = round(user_data.weight)
+    garment_id = garment_data.get('id', garment_data.get('name'))
+
+    # Delegate to the cached function
+    return _get_cached_advice(
+        user_data.event_type,
+        rounded_height,
+        rounded_weight,
+        garment_id,
+        garment_data['drape'],
+        garment_data['elasticity'],
+        garment_data['name']
+    )
