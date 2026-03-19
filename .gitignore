@@ -48,3 +48,12 @@ pids/
 *.pid
 *.seed
 *.pid.lock
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/

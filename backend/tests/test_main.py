@@ -36,3 +36,21 @@ def test_recommend_garment_engine_failure(monkeypatch):
         "code": 503,
         "message": "Jules AI Engine is currently recalibrating or unavailable. Please try again."
     }
+
+def test_recommend_garment_validation_error():
+    """
+    Test that the /api/recommend endpoint rejects invalid inputs with a 422
+    Unprocessable Entity response due to the Pydantic constraints.
+    """
+    # 1. Prepare invalid request payloads
+    invalid_payloads = [
+        {"height": 20.0, "weight": 68.0, "event_type": "Gala"},  # Height too small
+        {"height": 350.0, "weight": 68.0, "event_type": "Gala"}, # Height too large
+        {"height": 175.0, "weight": 10.0, "event_type": "Gala"},  # Weight too small
+        {"height": 175.0, "weight": 600.0, "event_type": "Gala"}, # Weight too large
+        {"height": 175.0, "weight": 68.0, "event_type": "A" * 101} # Event type too long
+    ]
+
+    for payload in invalid_payloads:
+        response = client.post("/api/recommend", json=payload)
+        assert response.status_code == 422

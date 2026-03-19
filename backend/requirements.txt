@@ -4,3 +4,6 @@ uvicorn
 python-dotenv
 pydantic
 gunicorn
+pytest
+httpx
+pytest-asyncio
