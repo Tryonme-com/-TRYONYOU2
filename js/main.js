@@ -1,20 +1,15 @@
 /**
- * TRYONYOU V10 - CORE ENGINE
- * Version: 10.0.3 (Divineo V10 + Shopify + MediaPipe + Pau)
- * Protocol: Zero-Size / ABVET Fusion / Private Pass / Biometric Analysis
+ * TRYONYOU - DIVINEO BUNKER / TOTALITY PROTOCOL
+ * Version: 11.0.0 (Divineo Bunker + Shopify + PAU Voice)
+ * Protocol: Zero-Size / ABVET Fusion / Biometric Analysis
  */
 
-// Import MediaPipe integration
 class MediaPipeBiometricAnalyzer {
     constructor() {
         this.isInitialized = false;
         this.measurements = {
-            shoulder_width: 45,
-            torso_length: 55,
-            arm_length: 65,
-            leg_length: 75
+            waist: 72 // Valor por defecto para simulaciones
         };
-        this.elasticity_score = 1.0;
     }
 
     async initialize() {
@@ -25,107 +20,56 @@ class MediaPipeBiometricAnalyzer {
     async analyzePose(videoElement) {
         if (!this.isInitialized) return null;
         
-        // Simulate pose analysis
-        this.elasticity_score = (this.measurements.shoulder_width + this.measurements.torso_length) / 100;
-        this.elasticity_score = Math.max(0.7, Math.min(1.3, this.elasticity_score));
-        
+        // Simulación de análisis biométrico real
+        // En producción esto vendría de MediaPipe
         return {
             measurements: this.measurements,
-            elasticity_score: this.elasticity_score,
             timestamp: new Date().toISOString()
         };
     }
-
-    getAnalysisReport() {
-        return {
-            status: this.isInitialized ? "READY" : "OFFLINE",
-            measurements: this.measurements,
-            elasticity_score: this.elasticity_score,
-            fit_category: this.getFitCategory(this.elasticity_score)
-        };
-    }
-
-    getFitCategory(elasticity_score) {
-        if (elasticity_score >= 0.95 && elasticity_score <= 1.05) {
-            return "PERFECT_FIT";
-        } else if (elasticity_score >= 0.85 && elasticity_score <= 1.15) {
-            return "EXCELLENT_FIT";
-        } else if (elasticity_score >= 0.75 && elasticity_score <= 1.25) {
-            return "GOOD_FIT";
-        } else {
-            return "CUSTOM_ADJUSTMENT_NEEDED";
-        }
-    }
 }
 
-class TryOnYouV10 {
+class TryOnYouBunker {
     constructor() {
         this.isCameraActive = false;
-        this.selectedProducts = [];
-        this.version = "10.0.3";
+        this.selectedGarmentId = "BALMAIN_SS26_SLIM";
+        this.version = "11.0.0";
         this.biometricAnalyzer = new MediaPipeBiometricAnalyzer();
-        this.shopifyProducts = [];
+        this.shopifyInventory = {
+            "BALMAIN_SS26_SLIM": {
+                "name": "Balmain Slim-Fit Jeans",
+                "price": "1.290 €",
+                "waist_flat_cm": 65,
+                "stretch_factor": 1.15
+            },
+            "LEVIS_510_STRETCH": {
+                "name": "Levis 510 Skinny",
+                "price": "110 €",
+                "waist_flat_cm": 68,
+                "stretch_factor": 1.10
+            }
+        };
         this.init();
     }
 
     init() {
-        console.log(`%c TRYONYOU V10 %c Initialized v${this.version} with Shopify + MediaPipe + Pau `, 
+        console.log(`%c DIVINEO BUNKER %c Initialized v${this.version} - TOTALITY PROTOCOL `, 
             'background: #C5A46D; color: #141619; font-weight: bold; padding: 2px 4px;', 
             'background: #141619; color: #C5A46D; padding: 2px 4px;');
         
         this.setupEventListeners();
         this.applyLuxuryTransitions();
-        this.checkSystemStatus();
         this.initializeBiometrics();
-        this.loadShopifyProducts();
     }
 
     async initializeBiometrics() {
         await this.biometricAnalyzer.initialize();
-        console.log("MediaPipe Biometric Scanner: Ready");
-    }
-
-    loadShopifyProducts() {
-        // Load products from Shopify integration
-        this.shopifyProducts = [
-            {
-                id: "cubist_jacket",
-                name: "Cubist Art Jacket",
-                sku: "CAP-ART-001",
-                elasticity_range: [0.85, 1.15],
-                colors: ["Matte_Black", "Peacock_White"],
-                price: 2500,
-                fit_type: "Architectural"
-            },
-            {
-                id: "peacock_blazer",
-                name: "Peacock Couture Blazer",
-                sku: "DIVINEO-LUX-007",
-                elasticity_range: [0.90, 1.10],
-                colors: ["Matte_Black", "Gold_Accent"],
-                price: 3200,
-                fit_type: "Fluid"
-            },
-            {
-                id: "trench_v10",
-                name: "Trench V10 Protocol",
-                sku: "V10-PROTO-01",
-                elasticity_range: [0.80, 1.20],
-                colors: ["Matte_Black", "Antracita"],
-                price: 2800,
-                fit_type: "Structured"
-            }
-        ];
-        console.log("Shopify Products Loaded: " + this.shopifyProducts.length);
+        console.log("🛡️ Divineo Biometric Scanner: Active");
     }
 
     setupEventListeners() {
-        // Forms
-        const contactForm = document.querySelector('.contact-form form');
-        if (contactForm) contactForm.addEventListener('submit', this.handleContactForm.bind(this));
-
         const julesForm = document.getElementById('jules-form');
-        if (julesForm) julesForm.addEventListener('submit', this.handleJulesConsultation.bind(this));
+        if (julesForm) julesForm.addEventListener('submit', this.handleDivineoExecution.bind(this));
 
         // Navigation
         document.querySelectorAll('.nav-menu a[href^="#"]').forEach(link => {
@@ -138,7 +82,7 @@ class TryOnYouV10 {
             if (productId) {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
-                    this.toggleProduct(productId, item);
+                    this.selectGarment(productId, item);
                 });
                 item.removeAttribute('onclick');
             }
@@ -152,121 +96,73 @@ class TryOnYouV10 {
         
         if (targetSection) {
             const offsetTop = targetSection.offsetTop - 100;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: offsetTop, behavior: 'smooth' });
         }
     }
 
-    async handleJulesConsultation(event) {
+    async handleDivineoExecution(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
-        const data = {
-            body_shape: formData.get('body_shape'),
-            fit_preference: formData.get('fit_preference'),
-            event_type: formData.get('event_type')
-        };
+        const eventType = formData.get('event_type');
 
         const resultContainer = document.getElementById('jules-result');
         const resultText = document.getElementById('recommendation-text');
         const submitBtn = event.target.querySelector('button[type="submit"]');
 
         try {
-            submitBtn.innerHTML = '<span class="loader"></span> ANALYZING BIOMETRICS + SHOPIFY CATALOG...';
+            submitBtn.innerHTML = '<span class="loader"></span> EXECUTING DIVINEO TOTALITY...';
             submitBtn.disabled = true;
 
-            // Analyze biometrics
+            // 1. Handshake de Seguridad (Simulado para el frontend)
+            const userId = "LAFAYETTE_LEAD_USER";
+            const ts = Math.floor(Date.now() / 1000);
+            const token = `${ts}.SIMULATED_SIG`; // En prod se generaría con HMAC
+
+            // 2. Análisis Biométrico
             const biometricData = await this.biometricAnalyzer.analyzePose(null);
-            const elasticity = biometricData.elasticity_score;
+            const userWaist = biometricData.measurements.waist;
 
-            // Find best fit product from Shopify
-            const bestFitProduct = this.findBestFitProduct(elasticity);
+            // 3. Motor de Certeza (Lógica Divineo Bunker)
+            const item = this.shopifyInventory[this.selectedGarmentId];
+            const fitIndex = userWaist / (item.waist_flat_cm * item.stretch_factor);
+            const isDivineo = fitIndex >= 0.95 && fitIndex <= 1.05;
 
-            // Generate Pau recommendation
-            const recommendation = this.generatePauRecommendation(bestFitProduct, elasticity, data);
+            // 4. Generación de Respuesta PAU
+            let pauVoice = "";
+            if (isDivineo) {
+                pauVoice = `Hola, soy P.A.U. Divineo confirmado con ${item.name}. Tu silueta es real y el ajuste es exacto. (Certeza: ${fitIndex.toFixed(3)})`;
+            } else {
+                pauVoice = `P.A.U. sugiere verificar el ajuste. Buscamos el Divineo absoluto para tu ${item.name}. (Certeza: ${fitIndex.toFixed(3)})`;
+            }
 
             resultContainer.style.display = 'block';
             resultContainer.style.opacity = '0';
-            resultText.textContent = recommendation;
+            resultText.textContent = pauVoice + "\n\n[MÉTRICAS DIVINEO]\nPatente: PCT/EP2025/067317\nReducción de Devoluciones: " + (isDivineo ? "40% SAVED" : "0%");
             
             setTimeout(() => {
                 resultContainer.style.transition = 'opacity 0.8s ease';
                 resultContainer.style.opacity = '1';
             }, 10);
 
-            this.showNotification('Pau + Shopify Analysis Complete', 'success');
+            this.showNotification('Divineo Totality Executed', 'success');
 
         } catch (error) {
-            this.showNotification('Fusion Engine Offline', 'error');
+            this.showNotification('Bunker Offline', 'error');
         } finally {
-            submitBtn.textContent = 'ASK JULES';
+            submitBtn.textContent = 'ASK PAU / DIVINEO';
             submitBtn.disabled = false;
         }
     }
 
-    findBestFitProduct(elasticity_score) {
-        let bestFit = null;
-        let bestScore = Infinity;
-
-        for (const product of this.shopifyProducts) {
-            const [min, max] = product.elasticity_range;
-            
-            if (elasticity_score >= min && elasticity_score <= max) {
-                const center = (min + max) / 2;
-                const distance = Math.abs(elasticity_score - center);
-                
-                if (distance < bestScore) {
-                    bestScore = distance;
-                    bestFit = product;
-                }
-            }
-        }
-
-        return bestFit || this.shopifyProducts[0];
-    }
-
-    generatePauRecommendation(product, elasticity_score, context) {
-        const event_type = context.event_type || "Casual";
-        const fit_type = product.fit_type || "Unknown";
-        const product_name = product.name || "Item";
-        
-        const recommendations = {
-            "Gala": `[PAU RECOMMENDATION - GALA EDITION]\n\nFor your Gala evening, the ${product_name} offers ${fit_type} elegance. Your biometric profile (elasticity: ${elasticity_score.toFixed(2)}) suggests a perfect ${fit_type.lower()} fit. This piece will enhance your architectural presence.\n\n✨ Wear with confidence.`,
-            "Business": `[PAU RECOMMENDATION - BUSINESS EDITION]\n\nThe ${product_name} brings professional sophistication. Its ${fit_type} design aligns perfectly with your body's natural geometry. Elasticity: ${elasticity_score.toFixed(2)}.\n\n✨ Professional excellence awaits.`,
-            "Cocktail": `[PAU RECOMMENDATION - COCKTAIL EDITION]\n\nFor cocktail sophistication, this ${product_name} with ${fit_type} architecture is ideal. Your biometric data confirms optimal fit. Confidence level: High.\n\n✨ Shine brightly.`,
-            "Casual": `[PAU RECOMMENDATION - CASUAL EDITION]\n\nCasual elegance meets precision fit. The ${product_name} adapts to your unique profile with elasticity ${elasticity_score.toFixed(2)}. Pure comfort and style.\n\n✨ Be yourself, perfectly.`
-        };
-        
-        return recommendations[event_type] || `[PAU RECOMMENDATION]\n\nThe ${product_name} is perfectly suited for you with elasticity ${elasticity_score.toFixed(2)}.\n\n✨ Wear with confidence.`;
-    }
-
-    toggleProduct(productId, element) {
-        const index = this.selectedProducts.indexOf(productId);
-        if (index > -1) {
-            this.selectedProducts.splice(index, 1);
-            element.classList.remove('selected');
-            element.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-            this.showNotification(`${productId.replace('_', ' ')} removed`, 'info');
-        } else {
-            this.selectedProducts.push(productId);
-            element.classList.add('selected');
-            element.style.borderColor = '#C5A46D';
-            this.showNotification(`${productId.replace('_', ' ')} selected`, 'success');
-            
-            if (this.isCameraActive) {
-                this.simulateVirtualTryOn(productId);
-            }
-        }
-    }
-
-    simulateVirtualTryOn(productId) {
-        const placeholder = document.querySelector('.camera-placeholder');
-        placeholder.style.boxShadow = 'inset 0 0 50px rgba(197, 164, 109, 0.3)';
-        setTimeout(() => {
-            placeholder.style.boxShadow = 'none';
-            this.showNotification(`V10 Render: ${productId} applied`, 'success');
-        }, 800);
+    selectGarment(garmentId, element) {
+        this.selectedGarmentId = garmentId;
+        document.querySelectorAll('.product-item').forEach(item => {
+            item.classList.remove('selected');
+            item.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        });
+        element.classList.add('selected');
+        element.style.borderColor = '#C5A46D';
+        this.showNotification(`${garmentId.replace(/_/g, ' ')} selected`, 'success');
     }
 
     toggleCamera() {
@@ -280,26 +176,19 @@ class TryOnYouV10 {
             cameraView.classList.add('active');
             cameraBtn.textContent = 'STOP BIOMETRIC SCAN';
             placeholder.innerHTML = `
-                <div class="v10-scan-overlay"></div>
-                <p style="color: #C5A46D; font-size: 1.2rem; letter-spacing: 2px;">BIOMETRIC SCAN ACTIVE</p>
-                <p style="font-weight: 300; opacity: 0.6;">V10 FUSION ENGINE READY</p>
+                <div class="v10-scan-overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(197, 164, 109, 0.1); border: 2px solid #C5A46D; animation: pulse 2s infinite;"></div>
+                <p style="color: #C5A46D; font-size: 1.2rem; letter-spacing: 2px; z-index:10;">SCANNING SILHOUETTE...</p>
             `;
-            this.showNotification('Biometric Scan Started', 'success');
+            this.showNotification('Divineo Scan Started', 'success');
         } else {
             cameraView.classList.remove('active');
             cameraBtn.textContent = 'START BIOMETRIC SCAN';
             placeholder.innerHTML = `
                 <p>CAMERA VIEW</p>
-                <p style="font-weight: 300; opacity: 0.5;">Click to begin V10 experience</p>
+                <p style="font-weight: 300; opacity: 0.5;">Click to begin Divineo experience</p>
             `;
             this.showNotification('Scan Terminated', 'info');
         }
-    }
-
-    handleContactForm(event) {
-        event.preventDefault();
-        this.showNotification('Message encrypted and sent', 'success');
-        event.target.reset();
     }
 
     showNotification(message, type = 'info') {
@@ -333,15 +222,6 @@ class TryOnYouV10 {
         });
     }
 
-    checkSystemStatus() {
-        console.log("V10: All systems nominal.");
-        console.log("  ✓ Zero-Size Protocol active");
-        console.log("  ✓ Shopify Integration: Connected");
-        console.log("  ✓ MediaPipe Biometric: Ready");
-        console.log("  ✓ Pau Recommendation Engine: Online");
-    }
-
-    // Private Pass Logic
     requestPrivatePass() {
         const modal = document.getElementById('private-pass-modal');
         modal.style.display = 'flex';
@@ -355,29 +235,26 @@ class TryOnYouV10 {
     verifyPrivatePass() {
         const input = document.getElementById('private-pass-input');
         if (input.value === "SAC_MUSEUM_2026") {
-            this.showNotification('ACCESO CONCEDIDO: CURADOR AUTORIZADO', 'success');
-            setTimeout(() => {
-                window.location.href = "/staff-dashboard"; // Placeholder for private area
-            }, 1500);
+            this.showNotification('ACCESO CONCEDIDO', 'success');
+            setTimeout(() => { window.location.href = "/staff-dashboard"; }, 1500);
         } else {
-            this.showNotification('ACCESO DENEGADO: CREDENCIAL INVÁLIDA', 'error');
+            this.showNotification('ACCESO DENEGADO', 'error');
             input.value = "";
         }
     }
 }
 
-// Global Handlers for V10
+// Global Handlers
 window.startTryOn = () => {
     const section = document.getElementById('try-on');
     if (section) window.scrollTo({ top: section.offsetTop - 100, behavior: 'smooth' });
 };
 
-window.toggleCamera = () => window.v10App.toggleCamera();
-window.requestPrivatePass = () => window.v10App.requestPrivatePass();
-window.closePrivatePass = () => window.v10App.closePrivatePass();
-window.verifyPrivatePass = () => window.v10App.verifyPrivatePass();
+window.toggleCamera = () => window.bunkerApp.toggleCamera();
+window.requestPrivatePass = () => window.bunkerApp.requestPrivatePass();
+window.closePrivatePass = () => window.bunkerApp.closePrivatePass();
+window.verifyPrivatePass = () => window.bunkerApp.verifyPrivatePass();
 
-// Initialize V10
 document.addEventListener('DOMContentLoaded', () => {
-    window.v10App = new TryOnYouV10();
+    window.bunkerApp = new TryOnYouBunker();
 });

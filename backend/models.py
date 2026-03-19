@@ -1,32 +1,41 @@
 from pydantic import BaseModel
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 class UserScan(BaseModel):
-    height: float
-    weight: float
+    user_id: str
+    token: str
+    waist: float
     event_type: str  # e.g., 'Gala', 'Business', 'Cocktail'
 
 class Garment(BaseModel):
     id: str
     name: str
-    elasticity: str  # 'High', 'Medium', 'Low'
-    drape: str       # 'Fluid', 'Structured', 'Heavy'
-    ideal_metrics: Dict[str, float]
+    waist_flat_cm: float
+    stretch_factor: float
+    stock: int
+    price: str
+    variant_id: str
 
-# Mock Database for Galeries Lafayette
-GARMENT_DB = [
-    {
-        "id": "GL-001",
-        "name": "Evening Silk Gown",
-        "elasticity": "Medium",
-        "drape": "Fluid",
-        "ideal_metrics": {"chest": 90, "waist": 70}
+# 👗 Catálogo Shopify (Divineo Bunker)
+SHOPIFY_INVENTORY = {
+    "BALMAIN_SS26_SLIM": {
+        "id": "BALMAIN_SS26_SLIM",
+        "name": "Balmain Slim-Fit Jeans",
+        "waist_flat_cm": 65,
+        "stretch_factor": 1.15,
+        "stock": 12,
+        "price": "1.290 €",
+        "variant_id": "gid://shopify/ProductVariant/445566"
     },
-    {
-        "id": "GL-002",
-        "name": "Tailored Wool Suit",
-        "elasticity": "Low",
-        "drape": "Structured",
-        "ideal_metrics": {"chest": 100, "waist": 85}
+    "LEVIS_510_STRETCH": {
+        "id": "LEVIS_510_STRETCH",
+        "name": "Levis 510 Skinny",
+        "waist_flat_cm": 68,
+        "stretch_factor": 1.10,
+        "stock": 45,
+        "price": "110 €",
+        "variant_id": "gid://shopify/ProductVariant/778899"
     }
-]
+}
+
+GARMENT_DB = list(SHOPIFY_INVENTORY.values())
