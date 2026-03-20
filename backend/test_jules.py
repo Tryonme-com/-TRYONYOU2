@@ -13,9 +13,11 @@ async def run_diagnostic():
     print("--- 🧪 DIVINEO AI: JULES ENGINE DIAGNOSTIC ---")
 
     # Simulate a user scan for a luxury event
+    # ⚡ Bolt: Updated UserScan to match current schema
     test_scan = UserScan(
-        height=175.0,
-        weight=68.0,
+        user_id="TEST_BOLT_USER",
+        token="1740000000.SIMULATED_SIG", # Mocked token
+        waist=72.0,
         event_type="Galeries Lafayette Opening Gala"
     )
 
@@ -23,15 +25,22 @@ async def run_diagnostic():
 
     # Execute the recommendation logic
     try:
-        result = await recommend_garment(test_scan)
+        # Mock valid token for testing
+        import hmac, hashlib, time
+        from main import SECRET_KEY
+        ts = str(int(time.time()))
+        sig = hmac.new(SECRET_KEY.encode(), f"{test_scan.user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
+        test_scan.token = f"{ts}.{sig}"
+
+        result = await recommend_garment(test_scan, garment_id="BALMAIN_SS26_SLIM")
 
         print("\n[✔] Backend Response Received:")
-        print(f"Garment Selected: {result['garment_name']}")
+        print(f"Status: {result['status']}")
         print("\n--- JULES STYLE ADVICE ---")
-        print(result['recommendation'])
+        print(result['styling_advice'])
 
         # Final Validation
-        advice = result['recommendation'].lower()
+        advice = result['styling_advice'].lower()
         forbidden = ["kg", "cm", "lbs", "size", "tall", "weight", "height"]
 
         if any(word in advice for word in forbidden):

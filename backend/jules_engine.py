@@ -1,4 +1,5 @@
 import os
+import functools
 import google.generativeai as genai
 from dotenv import load_dotenv
 
@@ -17,26 +18,19 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-def get_jules_advice(user_data, garment):
+@functools.lru_cache(maxsize=128)
+def _get_cached_jules_advice(event_type, garment_name, drape, elasticity):
     """
-    Generates an emotional styling tip without mentioning body numbers or sizes.
+    Internal cached function to generate LLM advice.
+    Using primitive types as arguments ensures they are hashable.
     """
-    # garment is a dict (from GARMENT_DB) or Garment object.
-    # The prompt usage implies dict access: garment['name']
-
-    # Handle both dict and Pydantic model
-    if hasattr(garment, 'dict'):
-        garment_data = garment.dict()
-    else:
-        garment_data = garment
-
     prompt = f"""
     You are 'Jules', a high-end fashion consultant at Galeries Lafayette.
-    A client is interested in the '{garment_data['name']}' for a {user_data.event_type}.
+    A client is interested in the '{garment_name}' for a {event_type}.
 
     Technical Context:
-    - Fabric Drape: {garment_data['drape']}
-    - Fabric Elasticity: {garment_data['elasticity']}
+    - Fabric Drape: {drape}
+    - Fabric Elasticity: {elasticity}
 
     Task:
     Explain why this garment is the perfect choice for their silhouette based
@@ -51,3 +45,26 @@ def get_jules_advice(user_data, garment):
 
     response = model.generate_content(prompt)
     return response.text
+
+def get_jules_advice(user_data, garment):
+    """
+    Generates an emotional styling tip without mentioning body numbers or sizes.
+    ⚡ Bolt: Added LRU cache to reduce expensive LLM calls for repeated parameters.
+    """
+    # garment is a dict (from GARMENT_DB) or Garment object.
+    # The prompt usage implies dict access: garment['name']
+
+    # Handle both dict and Pydantic model
+    if hasattr(garment, 'dict'):
+        garment_data = garment.dict()
+    else:
+        garment_data = garment
+
+    # Extract stable fields for the cache key
+    # We round numeric values to increase cache hits for similar silhouettes
+    return _get_cached_jules_advice(
+        user_data.event_type,
+        garment_data['name'],
+        garment_data.get('drape', 'Natural Fall'),
+        garment_data.get('elasticity', 'Standard')
+    )
