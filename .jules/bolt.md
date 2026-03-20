@@ -1,0 +1,3 @@
+## 2025-05-15 - [LRU Caching for LLM Recommendations]
+**Learning:** LLM calls in the styling engine are synchronous and expensive, leading to noticeable latency in the recommendation process. Since many users share similar biometric profiles (waist measurements) and choose from a limited set of garments and event types, caching these recommendations can significantly improve response times for repeat or similar queries.
+**Action:** Implement a bounded LRU cache (maxsize=128) in 'backend/jules_engine.py'. Normalize inputs (garment name, event type, and fabric properties) to increase cache hit rates and ensure cache keys are hashable.
