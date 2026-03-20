@@ -84,6 +84,12 @@ class TryOnYouBunker {
                     e.preventDefault();
                     this.selectGarment(productId, item);
                 });
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.selectGarment(productId, item);
+                    }
+                });
                 item.removeAttribute('onclick');
             }
         });
