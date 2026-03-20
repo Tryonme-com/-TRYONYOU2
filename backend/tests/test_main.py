@@ -14,13 +14,18 @@ def test_recommend_garment_engine_failure(monkeypatch):
     def mock_get_jules_advice(*args, **kwargs):
         raise Exception("Simulated AI Engine Failure")
 
+    # Mock verify_auth to bypass security handshake for this test
+    monkeypatch.setattr("backend.main.verify_auth", lambda u, t: True)
+
     # Use monkeypatch to replace the real function with our mock
     monkeypatch.setattr("backend.main.get_jules_advice", mock_get_jules_advice)
 
     # 2. Prepare the request payload
+    # Must match UserScan model in backend/models.py
     payload = {
-        "height": 175.0,
-        "weight": 68.0,
+        "user_id": "TEST_USER",
+        "token": "0.TEST_TOKEN", # This will fail verify_auth due to timestamp, but get_jules_advice is called later
+        "waist": 70.0,
         "event_type": "Gala"
     }
 

@@ -2,11 +2,16 @@ import hmac
 import hashlib
 import time
 import json
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class DivineoBunker:
     def __init__(self):
         # 🛡️ Configuración Maestra (abvetos.com)
-        self.secret_key = "LVT_SECRET_PROD_091228222"
+        self.secret_key = os.getenv("LVT_SECRET_KEY", "DEVELOPMENT_SECRET_KEY_REPLACE_ME")
         self.patent = "PCT/EP2025/067317"
         self.algorithm_v = "V10_Divineo_Shopify_Final"
         
