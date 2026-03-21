@@ -68,6 +68,7 @@ async def recommend_garment(scan: UserScan, garment_id: str = "BALMAIN_SS26_SLIM
         # Usamos Jules para el toque de estilo
         styling_advice = get_jules_advice(scan, item)
     except Exception as e:
+        # Fallback to maintain stability if AI engine fails
         styling_advice = f"Divineo confirmado con {item['name']}."
 
     if is_divineo and item['stock'] > 0:
