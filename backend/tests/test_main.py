@@ -1,8 +1,16 @@
 import pytest
+import hmac
+import hashlib
+import time
 from fastapi.testclient import TestClient
-from backend.main import app
+from backend.main import app, SECRET_KEY
 
 client = TestClient(app)
+
+def generate_test_token(user_id: str):
+    ts = str(int(time.time()))
+    sig = hmac.new(SECRET_KEY.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
+    return f"{ts}.{sig}"
 
 def test_recommend_garment_engine_failure(monkeypatch):
     """
@@ -18,9 +26,11 @@ def test_recommend_garment_engine_failure(monkeypatch):
     monkeypatch.setattr("backend.main.get_jules_advice", mock_get_jules_advice)
 
     # 2. Prepare the request payload
+    user_id = "test_user_123"
     payload = {
-        "height": 175.0,
-        "weight": 68.0,
+        "user_id": user_id,
+        "token": generate_test_token(user_id),
+        "waist": 72.0,
         "event_type": "Gala"
     }
 
