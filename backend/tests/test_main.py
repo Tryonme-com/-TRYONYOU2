@@ -19,19 +19,23 @@ def test_recommend_garment_engine_failure(monkeypatch):
 
     # 2. Prepare the request payload
     payload = {
-        "height": 175.0,
-        "weight": 68.0,
+        "user_id": "test_user",
+        "token": "1741164800.mock_sig",
+        "waist": 70.0,
         "event_type": "Gala"
     }
 
     # 3. Send the POST request to the endpoint
+    # We need to mock verify_auth to return True as we changed SECRET_KEY to env var
+    monkeypatch.setattr("backend.main.verify_auth", lambda u, t: True)
+
     response = client.post("/api/recommend", json=payload)
 
     # 4. Assertions
     assert response.status_code == 503
 
     data = response.json()
-    assert data == {
+    assert data["detail"] == {
         "status": "error",
         "code": 503,
         "message": "Jules AI Engine is currently recalibrating or unavailable. Please try again."

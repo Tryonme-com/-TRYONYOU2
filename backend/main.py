@@ -2,7 +2,11 @@ import hmac
 import hashlib
 import time
 import json
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+
+load_dotenv()
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from models import UserScan, SHOPIFY_INVENTORY
@@ -10,16 +14,18 @@ from jules_engine import get_jules_advice
 
 app = FastAPI(title="Divineo Bunker Backend")
 
+allowed_origins = os.getenv("LVT_ALLOWED_ORIGINS", "*").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # 🛡️ Configuración Maestra (abvetos.com)
-SECRET_KEY = "LVT_SECRET_PROD_091228222"
+SECRET_KEY = os.getenv("LVT_SECRET_KEY")
 PATENT = "PCT/EP2025/067317"
 
 def verify_auth(user_id: str, token: str) -> bool:
@@ -68,7 +74,14 @@ async def recommend_garment(scan: UserScan, garment_id: str = "BALMAIN_SS26_SLIM
         # Usamos Jules para el toque de estilo
         styling_advice = get_jules_advice(scan, item)
     except Exception as e:
-        styling_advice = f"Divineo confirmado con {item['name']}."
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "status": "error",
+                "code": 503,
+                "message": "Jules AI Engine is currently recalibrating or unavailable. Please try again."
+            }
+        )
 
     if is_divineo and item['stock'] > 0:
         return {
