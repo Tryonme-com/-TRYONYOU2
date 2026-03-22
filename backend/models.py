@@ -15,6 +15,8 @@ class Garment(BaseModel):
     stock: int
     price: str
     variant_id: str
+    drape: str
+    elasticity: str
 
 # 👗 Catálogo Shopify (Divineo Bunker)
 SHOPIFY_INVENTORY = {
@@ -25,7 +27,9 @@ SHOPIFY_INVENTORY = {
         "stretch_factor": 1.15,
         "stock": 12,
         "price": "1.290 €",
-        "variant_id": "gid://shopify/ProductVariant/445566"
+        "variant_id": "gid://shopify/ProductVariant/445566",
+        "drape": "Architectural and structured",
+        "elasticity": "Minimal with memory retention"
     },
     "LEVIS_510_STRETCH": {
         "id": "LEVIS_510_STRETCH",
@@ -34,7 +38,9 @@ SHOPIFY_INVENTORY = {
         "stretch_factor": 1.10,
         "stock": 45,
         "price": "110 €",
-        "variant_id": "gid://shopify/ProductVariant/778899"
+        "variant_id": "gid://shopify/ProductVariant/778899",
+        "drape": "Fluid and adaptive",
+        "elasticity": "High performance stretch"
     }
 }
 
