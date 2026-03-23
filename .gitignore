@@ -26,6 +26,15 @@ build/
 .DS_Store
 .DS_Store?
 ._*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
 .Spotlight-V100
 .Trashes
 ehthumbs.db

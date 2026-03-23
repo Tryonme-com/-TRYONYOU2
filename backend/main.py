@@ -2,24 +2,30 @@ import hmac
 import hashlib
 import time
 import json
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from models import UserScan, SHOPIFY_INVENTORY
 from jules_engine import get_jules_advice
 
+load_dotenv()
+
 app = FastAPI(title="Divineo Bunker Backend")
+
+# 🛡️ Configuración Maestra (abvetos.com)
+SECRET_KEY = os.getenv("LVT_SECRET_KEY", "LVT_DEV_SECRET_DO_NOT_USE_IN_PROD")
+ALLOWED_ORIGINS = os.getenv("LVT_ALLOWED_ORIGINS", "*").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 🛡️ Configuración Maestra (abvetos.com)
-SECRET_KEY = "LVT_SECRET_PROD_091228222"
 PATENT = "PCT/EP2025/067317"
 
 def verify_auth(user_id: str, token: str) -> bool:
