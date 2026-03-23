@@ -25,7 +25,9 @@ SHOPIFY_INVENTORY = {
         "stretch_factor": 1.15,
         "stock": 12,
         "price": "1.290 €",
-        "variant_id": "gid://shopify/ProductVariant/445566"
+        "variant_id": "gid://shopify/ProductVariant/445566",
+        "drape": "Architectural",
+        "elasticity": "Medium-High Recovery"
     },
     "LEVIS_510_STRETCH": {
         "id": "LEVIS_510_STRETCH",
@@ -34,7 +36,9 @@ SHOPIFY_INVENTORY = {
         "stretch_factor": 1.10,
         "stock": 45,
         "price": "110 €",
-        "variant_id": "gid://shopify/ProductVariant/778899"
+        "variant_id": "gid://shopify/ProductVariant/778899",
+        "drape": "Classic Slim",
+        "elasticity": "Moderate Comfort"
     }
 }
 
