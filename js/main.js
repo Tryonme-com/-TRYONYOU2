@@ -80,13 +80,28 @@ class TryOnYouBunker {
         document.querySelectorAll('.product-item').forEach(item => {
             const productId = item.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
             if (productId) {
-                item.addEventListener('click', (e) => {
+                const selectFn = (e) => {
                     e.preventDefault();
                     this.selectGarment(productId, item);
+                };
+                item.addEventListener('click', selectFn);
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') selectFn(e);
                 });
                 item.removeAttribute('onclick');
             }
         });
+
+        // Modal interactions
+        const passInput = document.getElementById('private-pass-input');
+        if (passInput) {
+            passInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.verifyPrivatePass();
+                }
+            });
+        }
     }
 
     handleNavClick(event) {
@@ -210,6 +225,7 @@ class TryOnYouBunker {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
@@ -225,6 +241,8 @@ class TryOnYouBunker {
     requestPrivatePass() {
         const modal = document.getElementById('private-pass-modal');
         modal.style.display = 'flex';
+        const input = document.getElementById('private-pass-input');
+        if (input) setTimeout(() => input.focus(), 100);
     }
 
     closePrivatePass() {

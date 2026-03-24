@@ -80,7 +80,7 @@
                         </div>
                         <button type="submit" class="cta-button" style="margin-top: 1rem;">Preguntar a P.A.U.</button>
                     </form>
-                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 4rem; padding: 2.5rem;">
+                    <div id="jules-result" class="jules-result" aria-live="polite" aria-atomic="true" style="display:none; margin-top: 4rem; padding: 2.5rem;">
                         <h3 style="margin-top: 0; color: #C5A46D; margin-bottom: 1.5rem;">Análisis de P.A.U.:</h3>
                         <p id="recommendation-text" style="white-space: pre-wrap; line-height: 1.8; font-weight: 300;"></p>
                     </div>
@@ -104,11 +104,11 @@
                     <div class="product-selector">
                         <h3>Catálogo Shopify</h3>
                         <div class="product-grid">
-                            <div class="product-item selected" onclick="selectProduct('BALMAIN_SS26_SLIM')" style="border-color: #C5A46D;">
+                            <div class="product-item selected" role="button" tabindex="0" aria-label="Seleccionar Balmain Slim-Fit Jeans - 1.290 €" onclick="selectProduct('BALMAIN_SS26_SLIM')" style="border-color: #C5A46D;">
                                 <div class="product-placeholder">BALMAIN SLIM</div>
                                 <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">1.290 €</p>
                             </div>
-                            <div class="product-item" onclick="selectProduct('LEVIS_510_STRETCH')">
+                            <div class="product-item" role="button" tabindex="0" aria-label="Seleccionar Levis 510 Skinny - 110 €" onclick="selectProduct('LEVIS_510_STRETCH')">
                                 <div class="product-placeholder">LEVIS 510</div>
                                 <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">110 €</p>
                             </div>
@@ -119,9 +119,9 @@
         </section>
 
         <!-- Private Pass Modal -->
-        <div id="private-pass-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center;">
+        <div id="private-pass-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center;">
             <div class="modal-content" style="background:#141619; border:1px solid #C5A46D; padding:3rem; max-width:500px; text-align:center;">
-                <h3 style="color:#C5A46D; margin-bottom:1.5rem;">PASE PRIVADO SOLICITADO</h3>
+                <h3 id="modal-title" style="color:#C5A46D; margin-bottom:1.5rem;">PASE PRIVADO SOLICITADO</h3>
                 <p style="color:#F5EFE6; opacity:0.7; margin-bottom:2rem;">Contenido restringido para Curadores del Búnker. Por favor, introduce tu credencial de acceso.</p>
                 <input type="password" id="private-pass-input" placeholder="Credential ID" style="width:100%; padding:1rem; background:#0d0e10; border:1px solid rgba(255,255,255,0.1); color:#F5EFE6; margin-bottom:2rem;">
                 <div style="display:flex; gap:1rem; justify-content:center;">
