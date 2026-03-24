@@ -23,6 +23,8 @@ SHOPIFY_INVENTORY = {
         "name": "Balmain Slim-Fit Jeans",
         "waist_flat_cm": 65,
         "stretch_factor": 1.15,
+        "drape": "Architectural",
+        "elasticity": "Dynamic",
         "stock": 12,
         "price": "1.290 €",
         "variant_id": "gid://shopify/ProductVariant/445566"
@@ -32,6 +34,8 @@ SHOPIFY_INVENTORY = {
         "name": "Levis 510 Skinny",
         "waist_flat_cm": 68,
         "stretch_factor": 1.10,
+        "drape": "Fluid",
+        "elasticity": "Standard",
         "stock": 45,
         "price": "110 €",
         "variant_id": "gid://shopify/ProductVariant/778899"

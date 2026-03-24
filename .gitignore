@@ -43,6 +43,15 @@ temp/
 coverage/
 .nyc_output
 
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+
 # Runtime data
 pids/
 *.pid
