@@ -225,6 +225,8 @@ class TryOnYouBunker {
     requestPrivatePass() {
         const modal = document.getElementById('private-pass-modal');
         modal.style.display = 'flex';
+        const input = document.getElementById('private-pass-input');
+        if (input) input.focus();
     }
 
     closePrivatePass() {
