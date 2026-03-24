@@ -1,3 +1,4 @@
+import os
 import hmac
 import hashlib
 import time
@@ -5,21 +6,28 @@ import json
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from models import UserScan, SHOPIFY_INVENTORY
 from jules_engine import get_jules_advice
 
+# Load .env file
+load_dotenv()
+
 app = FastAPI(title="Divineo Bunker Backend")
+
+# 🛡️ Secure CORS configuration via environment variables
+allowed_origins = os.getenv("LVT_ALLOWED_ORIGINS", "*").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 🛡️ Configuración Maestra (abvetos.com)
-SECRET_KEY = "LVT_SECRET_PROD_091228222"
+# 🛡️ Configuración Maestra (abvetos.com) - Secrets moved to environment variables
+SECRET_KEY = os.getenv("LVT_SECRET_KEY", "DEVELOPMENT_SECRET_DO_NOT_USE_IN_PROD")
 PATENT = "PCT/EP2025/067317"
 
 def verify_auth(user_id: str, token: str) -> bool:
