@@ -1,6 +1,7 @@
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
+from functools import lru_cache
 
 # Load .env from the same directory or current directory
 load_dotenv()
@@ -17,26 +18,18 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-def get_jules_advice(user_data, garment):
+@lru_cache(maxsize=128)
+def _get_cached_jules_advice(event_type: str, garment_name: str, drape: str, elasticity: str):
     """
-    Generates an emotional styling tip without mentioning body numbers or sizes.
+    Internal helper to cache LLM recommendations using primitive types.
     """
-    # garment is a dict (from GARMENT_DB) or Garment object.
-    # The prompt usage implies dict access: garment['name']
-
-    # Handle both dict and Pydantic model
-    if hasattr(garment, 'dict'):
-        garment_data = garment.dict()
-    else:
-        garment_data = garment
-
     prompt = f"""
     You are 'Jules', a high-end fashion consultant at Galeries Lafayette.
-    A client is interested in the '{garment_data['name']}' for a {user_data.event_type}.
+    A client is interested in the '{garment_name}' for a {event_type}.
 
     Technical Context:
-    - Fabric Drape: {garment_data['drape']}
-    - Fabric Elasticity: {garment_data['elasticity']}
+    - Fabric Drape: {drape}
+    - Fabric Elasticity: {elasticity}
 
     Task:
     Explain why this garment is the perfect choice for their silhouette based
@@ -48,6 +41,30 @@ def get_jules_advice(user_data, garment):
     3. Focus on elegance, comfort, and the fall of the fabric.
     4. Provide the response in French, followed by English and Spanish.
     """
-
     response = model.generate_content(prompt)
     return response.text
+
+def get_jules_advice(user_data, garment):
+    """
+    Generates an emotional styling tip without mentioning body numbers or sizes.
+    Uses LRU cache to reduce LLM latency for repeated garment/event combinations.
+    """
+    # Handle both dict and Pydantic model
+    if hasattr(garment, 'dict'):
+        garment_data = garment.dict()
+    elif isinstance(garment, dict):
+        garment_data = garment
+    else:
+        # Fallback for other potential types
+        garment_data = {
+            'name': getattr(garment, 'name', 'Unknown'),
+            'drape': getattr(garment, 'drape', 'Standard'),
+            'elasticity': getattr(garment, 'elasticity', 'Standard')
+        }
+
+    return _get_cached_jules_advice(
+        user_data.event_type,
+        garment_data.get('name', 'Unknown Garment'),
+        garment_data.get('drape', 'Standard'),
+        garment_data.get('elasticity', 'Standard')
+    )
