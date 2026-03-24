@@ -36,7 +36,7 @@ class DivineoBunker:
             if int(time.time()) - int(ts) > 600: return False # Ventana 10 min
             expected = hmac.new(self.secret_key.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
             return hmac.compare_digest(sig, expected)
-        except: return False
+        except Exception: return False
 
     def _calculate_fit(self, user_waist, item_id):
         item = self.shopify_inventory.get(item_id)

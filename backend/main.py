@@ -28,7 +28,7 @@ def verify_auth(user_id: str, token: str) -> bool:
         if int(time.time()) - int(ts) > 600: return False # Ventana 10 min
         expected = hmac.new(SECRET_KEY.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
         return hmac.compare_digest(sig, expected)
-    except: return False
+    except Exception: return False
 
 def calculate_fit(user_waist: float, item_id: str):
     item = SHOPIFY_INVENTORY.get(item_id)
