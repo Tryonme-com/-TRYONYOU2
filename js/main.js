@@ -232,14 +232,28 @@ class TryOnYouBunker {
         modal.style.display = 'none';
     }
 
-    verifyPrivatePass() {
+    async verifyPrivatePass() {
         const input = document.getElementById('private-pass-input');
-        if (input.value === "SAC_MUSEUM_2026") {
-            this.showNotification('ACCESO CONCEDIDO', 'success');
-            setTimeout(() => { window.location.href = "/staff-dashboard"; }, 1500);
-        } else {
-            this.showNotification('ACCESO DENEGADO', 'error');
-            input.value = "";
+        const password = input.value;
+
+        try {
+            // 🛡️ Verify credentials via backend to avoid hardcoded secrets in JS
+            const response = await fetch('/api/verify-staff', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+
+            if (response.ok) {
+                this.showNotification('ACCESO CONCEDIDO', 'success');
+                setTimeout(() => { window.location.href = "/staff-dashboard"; }, 1500);
+            } else {
+                this.showNotification('ACCESO DENEGADO', 'error');
+                input.value = "";
+            }
+        } catch (error) {
+            console.error('Staff verification failed:', error);
+            this.showNotification('ERROR DE CONEXIÓN AL BÚNKER', 'error');
         }
     }
 }

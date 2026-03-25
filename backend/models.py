@@ -7,6 +7,9 @@ class UserScan(BaseModel):
     waist: float
     event_type: str  # e.g., 'Gala', 'Business', 'Cocktail'
 
+class StaffLogin(BaseModel):
+    password: str
+
 class Garment(BaseModel):
     id: str
     name: str
