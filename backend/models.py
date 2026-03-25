@@ -42,4 +42,3 @@ SHOPIFY_INVENTORY = {
     }
 }
 
-GARMENT_DB = list(SHOPIFY_INVENTORY.values())
