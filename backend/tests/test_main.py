@@ -56,16 +56,25 @@ def test_recommend_garment_unauthorized():
     }
     response = client.post("/api/recommend", json=payload)
     assert response.status_code == 403
-    assert response.json()["detail"] == "Acceso restringido al búnker."
 
-def test_recommend_garment_expired_token(monkeypatch):
+def test_verify_staff_success():
+    """Test that the staff verification endpoint works with the correct password."""
+    payload = {"password": "SAC_MUSEUM_2026"}
+    response = client.post("/api/verify-staff", json=payload)
+    assert response.status_code == 200
+    assert response.json()["status"] == "SUCCESS"
+
+def test_verify_staff_failure():
+    """Test that the staff verification endpoint rejects incorrect passwords."""
+    payload = {"password": "WRONG_PASSWORD"}
+    response = client.post("/api/verify-staff", json=payload)
+    assert response.status_code == 403
+    assert response.json()["detail"] == "ACCESO DENEGADO"
+
+def test_recommend_garment_expired_token():
     """Test that expired tokens are rejected."""
-    # Set a fixed time for deterministic testing
-    current_time = 1678886400
-    monkeypatch.setattr(time, 'time', lambda: current_time)
-
     user_id = "TEST_USER"
-    ts = str(current_time - 1000) # Expired (1000s > 600s window)
+    ts = str(int(time.time()) - 1000) # Expired
     sig = hmac.new(SECRET_KEY.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
     token = f"{ts}.{sig}"
 

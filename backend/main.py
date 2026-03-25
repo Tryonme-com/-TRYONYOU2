@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from models import UserScan, SHOPIFY_INVENTORY
 from jules_engine import get_jules_advice
 
@@ -27,6 +28,10 @@ app.add_middleware(
 )
 
 PATENT = "PCT/EP2025/067317"
+STAFF_PASSWORD = os.getenv("STAFF_PASSWORD", "SAC_MUSEUM_2026")
+
+class StaffAuth(BaseModel):
+    password: str
 
 def verify_auth(user_id: str, token: str) -> bool:
     try:
@@ -96,6 +101,12 @@ async def recommend_garment(scan: UserScan, garment_id: str = "BALMAIN_SS26_SLIM
             "action": "TRIGGER_SIZE_ADVICE",
             "payload": {"fit_report": metrics}
         }
+
+@app.post("/api/verify-staff")
+async def verify_staff(auth: StaffAuth):
+    if hmac.compare_digest(auth.password, STAFF_PASSWORD):
+        return {"status": "SUCCESS", "message": "ACCESO CONCEDIDO"}
+    raise HTTPException(status_code=403, detail="ACCESO DENEGADO")
 
 if __name__ == "__main__":
     import uvicorn
