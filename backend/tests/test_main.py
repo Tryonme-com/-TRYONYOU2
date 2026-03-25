@@ -58,10 +58,14 @@ def test_recommend_garment_unauthorized():
     assert response.status_code == 403
     assert response.json()["detail"] == "Acceso restringido al búnker."
 
-def test_recommend_garment_expired_token():
+def test_recommend_garment_expired_token(monkeypatch):
     """Test that expired tokens are rejected."""
+    # Set a fixed time for deterministic testing
+    current_time = 1678886400
+    monkeypatch.setattr(time, 'time', lambda: current_time)
+
     user_id = "TEST_USER"
-    ts = str(int(time.time()) - 1000) # Expired
+    ts = str(current_time - 1000) # Expired (1000s > 600s window)
     sig = hmac.new(SECRET_KEY.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
     token = f"{ts}.{sig}"
 
