@@ -78,13 +78,20 @@ class TryOnYouBunker {
 
         // Product Selection
         document.querySelectorAll('.product-item').forEach(item => {
-            const productId = item.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+            const productId = item.dataset.productId;
             if (productId) {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     this.selectGarment(productId, item);
                 });
-                item.removeAttribute('onclick');
+
+                // Keyboard accessibility for product selection
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        item.click();
+                    }
+                });
             }
         });
     }
