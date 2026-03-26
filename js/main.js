@@ -35,6 +35,15 @@ class TryOnYouBunker {
         this.selectedGarmentId = "BALMAIN_SS26_SLIM";
         this.version = "11.0.0";
         this.biometricAnalyzer = new MediaPipeBiometricAnalyzer();
+        // Cache frequently accessed DOM elements
+        this.ui = {
+            julesResult: document.getElementById('jules-result'),
+            recommendationText: document.getElementById('recommendation-text'),
+            privatePassModal: document.getElementById('private-pass-modal'),
+            privatePassInput: document.getElementById('private-pass-input'),
+            julesForm: document.getElementById('jules-form'),
+            productItems: document.querySelectorAll('.product-item')
+        };
         this.shopifyInventory = {
             "BALMAIN_SS26_SLIM": {
                 "name": "Balmain Slim-Fit Jeans",
@@ -68,8 +77,7 @@ class TryOnYouBunker {
     }
 
     setupEventListeners() {
-        const julesForm = document.getElementById('jules-form');
-        if (julesForm) julesForm.addEventListener('submit', this.handleDivineoExecution.bind(this));
+        if (this.ui.julesForm) this.ui.julesForm.addEventListener('submit', this.handleDivineoExecution.bind(this));
 
         // Navigation
         document.querySelectorAll('.nav-menu a[href^="#"]').forEach(link => {
@@ -105,8 +113,8 @@ class TryOnYouBunker {
         const formData = new FormData(event.target);
         const eventType = formData.get('event_type');
 
-        const resultContainer = document.getElementById('jules-result');
-        const resultText = document.getElementById('recommendation-text');
+        const resultContainer = this.ui.julesResult;
+        const resultText = this.ui.recommendationText;
         const submitBtn = event.target.querySelector('button[type="submit"]');
 
         try {
@@ -156,7 +164,7 @@ class TryOnYouBunker {
 
     selectGarment(garmentId, element) {
         this.selectedGarmentId = garmentId;
-        document.querySelectorAll('.product-item').forEach(item => {
+        this.ui.productItems.forEach(item => {
             item.classList.remove('selected');
             item.style.borderColor = 'rgba(255, 255, 255, 0.1)';
         });
@@ -210,6 +218,8 @@ class TryOnYouBunker {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    // Optimization: stop observing once the transition is triggered
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
@@ -223,18 +233,16 @@ class TryOnYouBunker {
     }
 
     requestPrivatePass() {
-        const modal = document.getElementById('private-pass-modal');
-        modal.style.display = 'flex';
+        if (this.ui.privatePassModal) this.ui.privatePassModal.style.display = 'flex';
     }
 
     closePrivatePass() {
-        const modal = document.getElementById('private-pass-modal');
-        modal.style.display = 'none';
+        if (this.ui.privatePassModal) this.ui.privatePassModal.style.display = 'none';
     }
 
     verifyPrivatePass() {
-        const input = document.getElementById('private-pass-input');
-        if (input.value === "SAC_MUSEUM_2026") {
+        const input = this.ui.privatePassInput;
+        if (input && input.value === "SAC_MUSEUM_2026") {
             this.showNotification('ACCESO CONCEDIDO', 'success');
             setTimeout(() => { window.location.href = "/staff-dashboard"; }, 1500);
         } else {
