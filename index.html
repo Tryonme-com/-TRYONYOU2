@@ -80,7 +80,7 @@
                         </div>
                         <button type="submit" class="cta-button" style="margin-top: 1rem;">Preguntar a P.A.U.</button>
                     </form>
-                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 4rem; padding: 2.5rem;">
+                    <div id="jules-result" class="jules-result" style="display:none; margin-top: 4rem; padding: 2.5rem;" aria-live="polite">
                         <h3 style="margin-top: 0; color: #C5A46D; margin-bottom: 1.5rem;">Análisis de P.A.U.:</h3>
                         <p id="recommendation-text" style="white-space: pre-wrap; line-height: 1.8; font-weight: 300;"></p>
                     </div>
@@ -104,11 +104,11 @@
                     <div class="product-selector">
                         <h3>Catálogo Shopify</h3>
                         <div class="product-grid">
-                            <div class="product-item selected" onclick="selectProduct('BALMAIN_SS26_SLIM')" style="border-color: #C5A46D;">
+                            <div class="product-item selected" onclick="selectProduct('BALMAIN_SS26_SLIM')" style="border-color: #C5A46D;" role="button" tabindex="0" aria-label="Seleccionar Balmain Slim-Fit Jeans - 1.290 €">
                                 <div class="product-placeholder">BALMAIN SLIM</div>
                                 <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">1.290 €</p>
                             </div>
-                            <div class="product-item" onclick="selectProduct('LEVIS_510_STRETCH')">
+                            <div class="product-item" onclick="selectProduct('LEVIS_510_STRETCH')" role="button" tabindex="0" aria-label="Seleccionar Levis 510 Skinny - 110 €">
                                 <div class="product-placeholder">LEVIS 510</div>
                                 <p style="font-size: 0.8rem; text-align: center; color: #C5A46D;">110 €</p>
                             </div>
