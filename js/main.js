@@ -230,7 +230,19 @@ class TryOnYouBunker {
 
     requestPrivatePass() {
         const modal = document.getElementById('private-pass-modal');
+        const input = document.getElementById('private-pass-input');
         modal.style.display = 'flex';
+        input.focus();
+
+        if (!this._passListener) {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.verifyPrivatePass();
+                }
+            });
+            this._passListener = true;
+        }
     }
 
     closePrivatePass() {
