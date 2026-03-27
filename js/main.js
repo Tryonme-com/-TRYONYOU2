@@ -35,6 +35,12 @@ class TryOnYouBunker {
         this.selectedGarmentId = "BALMAIN_SS26_SLIM";
         this.version = "11.0.0";
         this.biometricAnalyzer = new MediaPipeBiometricAnalyzer();
+        // Performance: Cache frequently accessed DOM elements
+        this.dom = {
+            resultContainer: document.getElementById('jules-result'),
+            resultText: document.getElementById('recommendation-text'),
+            submitBtn: null // Assigned in handleDivineoExecution for contextual accuracy if needed
+        };
         this.shopifyInventory = {
             "BALMAIN_SS26_SLIM": {
                 "name": "Balmain Slim-Fit Jeans",
@@ -111,9 +117,13 @@ class TryOnYouBunker {
         const formData = new FormData(event.target);
         const eventType = formData.get('event_type');
 
-        const resultContainer = document.getElementById('jules-result');
-        const resultText = document.getElementById('recommendation-text');
-        const submitBtn = event.target.querySelector('button[type="submit"]');
+        // Performance: Re-use cached DOM or cache it once
+        const resultContainer = this.dom.resultContainer;
+        const resultText = this.dom.resultText;
+        if (!this.dom.submitBtn) {
+            this.dom.submitBtn = event.target.querySelector('button[type="submit"]');
+        }
+        const submitBtn = this.dom.submitBtn;
 
         try {
             submitBtn.innerHTML = '<span class="loader"></span> EXECUTING DIVINEO TOTALITY...';
@@ -211,11 +221,13 @@ class TryOnYouBunker {
     }
 
     applyLuxuryTransitions() {
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    // Performance: Unobserve after transition to save resources
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
