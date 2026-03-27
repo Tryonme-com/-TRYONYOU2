@@ -28,13 +28,16 @@ app.add_middleware(
 
 # 🛡️ Configuración Maestra (abvetos.com) - Secrets moved to environment variables
 SECRET_KEY = os.getenv("LVT_SECRET_KEY", "DEVELOPMENT_SECRET_DO_NOT_USE_IN_PROD")
+# Pre-encode secret key to bytes to save redundant encoding operations
+SECRET_KEY_BYTES = SECRET_KEY.encode()
 PATENT = "PCT/EP2025/067317"
 
 def verify_auth(user_id: str, token: str) -> bool:
     try:
         ts, sig = token.split('.')
         if int(time.time()) - int(ts) > 600: return False # Ventana 10 min
-        expected = hmac.new(SECRET_KEY.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
+        # Optimization: Use pre-encoded SECRET_KEY_BYTES
+        expected = hmac.new(SECRET_KEY_BYTES, f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
         return hmac.compare_digest(sig, expected)
     except: return False
 
@@ -50,7 +53,7 @@ def calculate_fit(user_waist: float, item_id: str):
     return is_perfect, round(fit_index, 3), item
 
 @app.post("/api/recommend")
-async def recommend_garment(scan: UserScan, garment_id: str = "BALMAIN_SS26_SLIM"):
+def recommend_garment(scan: UserScan, garment_id: str = "BALMAIN_SS26_SLIM"):
     # 1. Seguridad y Handshake
     if not verify_auth(scan.user_id, scan.token):
         raise HTTPException(status_code=403, detail="Acceso restringido al búnker.")
