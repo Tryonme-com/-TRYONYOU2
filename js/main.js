@@ -35,6 +35,9 @@ class TryOnYouBunker {
         this.selectedGarmentId = "BALMAIN_SS26_SLIM";
         this.version = "11.0.0";
         this.biometricAnalyzer = new MediaPipeBiometricAnalyzer();
+        // Cache frequently accessed DOM elements
+        this.resultContainer = null;
+        this.resultText = null;
         this.shopifyInventory = {
             "BALMAIN_SS26_SLIM": {
                 "name": "Balmain Slim-Fit Jeans",
@@ -57,6 +60,9 @@ class TryOnYouBunker {
             'background: #C5A46D; color: #141619; font-weight: bold; padding: 2px 4px;', 
             'background: #141619; color: #C5A46D; padding: 2px 4px;');
         
+        this.resultContainer = document.getElementById('jules-result');
+        this.resultText = document.getElementById('recommendation-text');
+
         this.setupEventListeners();
         this.applyLuxuryTransitions();
         this.initializeBiometrics();
@@ -111,8 +117,8 @@ class TryOnYouBunker {
         const formData = new FormData(event.target);
         const eventType = formData.get('event_type');
 
-        const resultContainer = document.getElementById('jules-result');
-        const resultText = document.getElementById('recommendation-text');
+        const resultContainer = this.resultContainer;
+        const resultText = this.resultText;
         const submitBtn = event.target.querySelector('button[type="submit"]');
 
         try {
@@ -216,6 +222,8 @@ class TryOnYouBunker {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
+                    // Unobserve to save resources after animation is triggered
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });

@@ -8,6 +8,7 @@ class DivineoBunker:
     def __init__(self):
         # 🛡️ Configuración Maestra (abvetos.com)
         self.secret_key = os.getenv("LVT_SECRET_KEY", "DEVELOPMENT_SECRET_DO_NOT_USE_IN_PROD")
+        self.secret_key_bytes = self.secret_key.encode() # Pre-encoded for performance
         self.patent = "PCT/EP2025/067317"
         self.algorithm_v = "V10_Divineo_Shopify_Final"
         
@@ -35,7 +36,8 @@ class DivineoBunker:
         try:
             ts, sig = token.split('.')
             if int(time.time()) - int(ts) > 600: return False # Ventana 10 min
-            expected = hmac.new(self.secret_key.encode(), f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
+            # Use pre-encoded key to save CPU cycles on every request
+            expected = hmac.new(self.secret_key_bytes, f"{user_id}:{ts}".encode(), hashlib.sha256).hexdigest()
             return hmac.compare_digest(sig, expected)
         except: return False
 
