@@ -1,0 +1,3 @@
+## 2025-05-22 - AI Consultation UX & A11y
+**Learning:** In a luxury-themed, Spanish-first interface, inconsistent English text and missing visual feedback during long-running AI operations (1.5s+) break immersion and reduce trust. Also, interactive form elements like the staff password input were missing descriptive `aria-label`s.
+**Action:** Always ensure that loading states use the same primary language as the rest of the section and provide a clear visual indicator (like a spinner) even if the delay is simulated. Use `aria-busy="true"` on submitting buttons to notify screen reader users of the ongoing process. Always check for missing labels on hidden or secondary form inputs like password modals.

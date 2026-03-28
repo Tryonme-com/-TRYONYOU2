@@ -116,15 +116,17 @@ class TryOnYouBunker {
         const submitBtn = event.target.querySelector('button[type="submit"]');
 
         try {
-            submitBtn.innerHTML = '<span class="loader"></span> EXECUTING DIVINEO TOTALITY...';
+            submitBtn.innerHTML = '<span class="loader"></span> EJECUTANDO DIVINEO...';
             submitBtn.disabled = true;
+            submitBtn.setAttribute('aria-busy', 'true');
 
             // 1. Handshake de Seguridad (Simulado para el frontend)
             const userId = "LAFAYETTE_LEAD_USER";
             const ts = Math.floor(Date.now() / 1000);
             const token = `${ts}.SIMULATED_SIG`; // En prod se generaría con HMAC
 
-            // 2. Análisis Biométrico
+            // 2. Análisis Biométrico (Simulado con retraso para UX)
+            await new Promise(resolve => setTimeout(resolve, 1500));
             const biometricData = await this.biometricAnalyzer.analyzePose(null);
             const userWaist = biometricData.measurements.waist;
 
@@ -155,8 +157,9 @@ class TryOnYouBunker {
         } catch (error) {
             this.showNotification('Bunker Offline', 'error');
         } finally {
-            submitBtn.textContent = 'ASK PAU / DIVINEO';
+            submitBtn.textContent = 'PREGUNTAR A P.A.U.';
             submitBtn.disabled = false;
+            submitBtn.removeAttribute('aria-busy');
         }
     }
 
