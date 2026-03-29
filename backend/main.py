@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from models import UserScan, SHOPIFY_INVENTORY
+from models import UserScan, StaffLogin, SHOPIFY_INVENTORY
 from jules_engine import get_jules_advice
 
 # Load .env file
@@ -28,6 +28,7 @@ app.add_middleware(
 
 # 🛡️ Configuración Maestra (abvetos.com) - Secrets moved to environment variables
 SECRET_KEY = os.getenv("LVT_SECRET_KEY", "DEVELOPMENT_SECRET_DO_NOT_USE_IN_PROD")
+STAFF_PASSWORD = os.getenv("STAFF_PASSWORD", "SAC_MUSEUM_2026")
 PATENT = "PCT/EP2025/067317"
 
 def verify_auth(user_id: str, token: str) -> bool:
@@ -48,6 +49,14 @@ def calculate_fit(user_waist: float, item_id: str):
     # Rango de Certeza Absoluta (0.95 - 1.05)
     is_perfect = 0.95 <= fit_index <= 1.05
     return is_perfect, round(fit_index, 3), item
+
+@app.post("/api/verify-staff")
+def verify_staff(login: StaffLogin):
+    """🛡️ Secure staff password verification via backend."""
+    if hmac.compare_digest(login.password, STAFF_PASSWORD):
+        return {"status": "SUCCESS", "message": "Acceso concedido al búnker."}
+    else:
+        raise HTTPException(status_code=401, detail="Credencial de acceso denegada.")
 
 @app.post("/api/recommend")
 async def recommend_garment(scan: UserScan, garment_id: str = "BALMAIN_SS26_SLIM"):
