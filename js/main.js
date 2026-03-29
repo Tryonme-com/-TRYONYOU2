@@ -80,9 +80,15 @@ class TryOnYouBunker {
         document.querySelectorAll('.product-item').forEach(item => {
             const productId = item.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
             if (productId) {
-                item.addEventListener('click', (e) => {
+                const selectFn = (e) => {
                     e.preventDefault();
                     this.selectGarment(productId, item);
+                };
+                item.addEventListener('click', selectFn);
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        selectFn(e);
+                    }
                 });
                 item.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
