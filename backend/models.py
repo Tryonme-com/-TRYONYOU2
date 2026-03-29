@@ -16,6 +16,9 @@ class Garment(BaseModel):
     price: str
     variant_id: str
 
+class StaffLogin(BaseModel):
+    password: str
+
 # 👗 Catálogo Shopify (Divineo Bunker)
 SHOPIFY_INVENTORY = {
     "BALMAIN_SS26_SLIM": {
