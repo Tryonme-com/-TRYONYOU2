@@ -116,8 +116,12 @@ class TryOnYouBunker {
         const submitBtn = event.target.querySelector('button[type="submit"]');
 
         try {
-            submitBtn.innerHTML = '<span class="loader"></span> EXECUTING DIVINEO TOTALITY...';
+            submitBtn.innerHTML = '<span class="loader"></span> EJECUTANDO DIVINEO...';
             submitBtn.disabled = true;
+            submitBtn.setAttribute('aria-busy', 'true');
+
+            // Simulate AI Processing Delay for better UX
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
             // 1. Handshake de Seguridad (Simulado para el frontend)
             const userId = "LAFAYETTE_LEAD_USER";
@@ -155,8 +159,9 @@ class TryOnYouBunker {
         } catch (error) {
             this.showNotification('Bunker Offline', 'error');
         } finally {
-            submitBtn.textContent = 'ASK PAU / DIVINEO';
+            submitBtn.textContent = 'PREGUNTAR A P.A.U.';
             submitBtn.disabled = false;
+            submitBtn.removeAttribute('aria-busy');
         }
     }
 
@@ -230,12 +235,22 @@ class TryOnYouBunker {
 
     requestPrivatePass() {
         const modal = document.getElementById('private-pass-modal');
+        const input = document.getElementById('private-pass-input');
         modal.style.display = 'flex';
+        input.focus();
+
+        // Listen for Escape key to close modal
+        this._modalKeyHandler = (e) => {
+            if (e.key === 'Escape') this.closePrivatePass();
+            if (e.key === 'Enter') this.verifyPrivatePass();
+        };
+        document.addEventListener('keydown', this._modalKeyHandler);
     }
 
     closePrivatePass() {
         const modal = document.getElementById('private-pass-modal');
         modal.style.display = 'none';
+        document.removeEventListener('keydown', this._modalKeyHandler);
     }
 
     verifyPrivatePass() {
@@ -246,6 +261,7 @@ class TryOnYouBunker {
         } else {
             this.showNotification('ACCESO DENEGADO', 'error');
             input.value = "";
+            input.focus();
         }
     }
 }
