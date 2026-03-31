@@ -28,7 +28,7 @@ app.add_middleware(
 
 # 🛡️ Configuración Maestra (abvetos.com) - Secrets moved to environment variables
 SECRET_KEY = os.getenv("LVT_SECRET_KEY", "DEVELOPMENT_SECRET_DO_NOT_USE_IN_PROD")
-STAFF_PASSWORD = os.getenv("STAFF_PASSWORD", "SAC_MUSEUM_2026")
+STAFF_PASSWORD = os.getenv("STAFF_PASSWORD")
 PATENT = "PCT/EP2025/067317"
 
 def verify_auth(user_id: str, token: str) -> bool:
