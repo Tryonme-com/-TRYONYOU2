@@ -53,6 +53,13 @@ def calculate_fit(user_waist: float, item_id: str):
 @app.post("/api/verify-staff")
 def verify_staff(login: StaffLogin):
     """🛡️ Secure staff password verification via backend."""
+    # Ensure staff authentication is properly configured before comparing.
+    if not STAFF_PASSWORD:
+        # Fail closed with a clear server-side configuration error.
+        raise HTTPException(
+            status_code=500,
+            detail="STAFF_PASSWORD is not configured on the server.",
+        )
     if hmac.compare_digest(login.password, STAFF_PASSWORD):
         return {"status": "SUCCESS", "message": "Acceso concedido al búnker."}
     else:
